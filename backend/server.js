@@ -17,12 +17,31 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Configure CORS
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://crit-p-wovp.vercel.app',
+  'https://crit-p-2.onrender.com',
+  'https://crit-p-2.onrender.com/*',
+  'https://crit-p-2.onrender.com/api/*'
+];
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://crit-p-wovp.vercel.app'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      console.error('CORS Error:', { origin, allowedOrigins });
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 };
 
 // Middleware

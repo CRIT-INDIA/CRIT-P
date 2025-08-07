@@ -356,7 +356,8 @@ export default function CritIndiaCtaForm({ onClose }) {
       console.log('Data being sent to backend:', submitData);
       
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:5000';
+        const apiUrl = 'https://crit-p-2.onrender.com'; // Production backend URL
+        console.log('Making request to:', `${apiUrl}/api/cta/submit`);
         const response = await fetch(`${apiUrl}/api/cta/submit`, {
           method: 'POST',
           headers: {
