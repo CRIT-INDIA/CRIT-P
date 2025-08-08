@@ -1,7 +1,12 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+
+const _dirname = path.resolve();
 
 // Import routes
 const contactRoutes = require('./routes/contact');
@@ -82,6 +87,10 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
+
+app.use(express.static(path.join(_dirname, '/frontend/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(_dirname, '/frontend/dist/index.html'));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

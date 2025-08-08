@@ -539,8 +539,7 @@ export default function ServiceBlock({ serviceName }) {
         section.title.toLowerCase().includes('rollout')
       );
       
-      if (rolloutService) {
-        console.log('Matched rollout service:', rolloutService.title);
+      if (rolloutService) {;
         return rolloutService;
       }
     }

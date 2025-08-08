@@ -9,7 +9,6 @@ export default function ContactSection() {
   
   // Debug: Log state changes and handle escape key
   useEffect(() => {
-    console.log('showChat state changed:', showChat);
     
     // Add event listener for escape key to close modal
     const handleEscapeKey = (e) => {
@@ -72,7 +71,7 @@ export default function ContactSection() {
   const contactIcons = [
     { icon: Facebook, id: 'facebook', action: () => window.open('https://www.facebook.com') },
     { icon: MessageCircle, id: 'chat', action: () => {
-      console.log('Opening chat modal');
+      
       document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
       setShowChat(true);
     }},
@@ -166,7 +165,6 @@ export default function ContactSection() {
                       onMouseLeave={() => setHoveredIcon(null)}
                       onClick={(e) => {
                         e.preventDefault();
-                        console.log(`Clicked on ${item.id} icon`);
                         item.action();
                       }}
                       aria-label={item.id}

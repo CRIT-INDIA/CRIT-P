@@ -384,7 +384,6 @@ export default function ContactForm() {
         const result = await response.json();
         
         if (result.success) {
-          console.log('Contact form submitted successfully:', result);
           setIsSubmitted(true);
           alert('Form submitted successfully!');
           

@@ -228,7 +228,6 @@ const Navbar = () => {
 
   // Effect for handling mobile menu state
   useEffect(() => { 
-    console.log('Mobile menu state changed:', isMobileMenuOpen); 
     
     if (isMobileMenuOpen) {
       document.body.classList.add('overflow-hidden');
