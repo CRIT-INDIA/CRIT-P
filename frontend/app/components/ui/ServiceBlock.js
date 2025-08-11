@@ -772,12 +772,10 @@ export default function ServiceBlock({ serviceName }) {
 
   return (
     <div className="min-h-screen" key={`service-${serviceName || 'default'}`}>
-      {/* Preload the hero image in the document head */}
+      
       <link 
-        rel="preload" 
         as="image" 
         href={serviceSection?.image} 
-        fetchPriority="high"
       />
       
       {/* Hero Section */}
@@ -885,30 +883,30 @@ export default function ServiceBlock({ serviceName }) {
                   {/* Pair 1 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753165462/Project_70-02_uw5nzc.jpg" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf_qxb9gf.avif" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.2s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166207/101_ZS0yMw_jp1azj.jpg" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8_rwngic.avif" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                   
                   {/* Pair 2 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.4s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166794/MyApril10_k7z7wb.jpg" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox_moo0ly.avif" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.6s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167637/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox.jpg" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/101_ZS0yMw_jp1azj_a3b0xt.avif" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                   
                   {/* Pair 3 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.8s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167770/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf.jpg" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/MyApril10_k7z7wb_n3f3yo.avif" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '1s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167937/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8.jpg" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/i_nqzu4g.avif" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                 </div>

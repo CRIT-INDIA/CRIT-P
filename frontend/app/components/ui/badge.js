@@ -162,7 +162,6 @@ const CardCarousel = ({
                 }}
               >
                 {images.map((image, index) => {
-                  console.log('Image URL:', image.src); // Debug log
                   return (
                     <SwiperSlide key={index} className="flex items-center justify-center">
                       <div className="w-[300px] h-[400px] rounded-3xl shadow-2xl overflow-hidden relative">
@@ -218,5 +217,30 @@ export function SimpleBadge({ children, className = "", ...props }) {
   );
 }
 
-// Export as default
+// BasicExample function for the home page
+function BasicExample() {
+  const images = [
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753680388/istockphoto-2004564843-1024x1024_1_x6gfh5.avif", alt: "manufacuring Photo", industry: "Manufacturing" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753687876/istockphoto-1368043872-1024x1024_1_malysw.avif", alt: "healthcare Photo", industry: "Healthcare" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753680974/istockphoto-870301606-1024x1024_1_ujsq5j.avif", alt: "It companies Photo", industry: "IT Companies" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753681293/remove_watermark_image_20250728_111025_rjdpng.avif", alt: "Trader & Distributor Image", industry: "Traders & Distributors" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753687055/istockphoto-2212531431-1024x1024-processed_lightpdf.com_wa6pjr.avif", alt: "Education Image", industry: "Education" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753684569/wmremove-transformed_13_gxy30s.avif", alt: "Real Estate & Construction", industry: "Real Estate & Construction" },
+    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753678389/wmremove-transformed_12_s29fd3.avif", alt: "Retail Industry", industry: "Retail Industry" },
+  ];
+
+  return (
+    <div className="">
+      <CardCarousel
+        images={images}
+        autoplayDelay={2000}
+        showPagination={true}
+        showNavigation={true}
+      />
+    </div>
+  );
+}
+
+// Export both components
+export { CardCarousel, BasicExample };
 export default CardCarousel;

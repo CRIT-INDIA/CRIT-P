@@ -621,7 +621,7 @@ export default function ERPImplementationDiagram() {
           {/* Desktop Robot and Info Section */}
           <div className="relative flex items-center justify-center lg:ml-[-40px]">
             <img
-              src="https://res.cloudinary.com/dujw4np0d/image/upload/v1751954513/vecteezy_3d-cute-robot-consultant-with-friendly-expression-pointing_52259583_z9hfjk.png"
+              src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754893361/vecteezy_3d-cute-robot-consultant-with-friendly-expression-pointing_52259583_z9hfjk_gz6wli.avif"
               alt="Robot"
               className="h-auto pt-23 max-h-96 lg:max-h-[500px] rounded-lg transition-transform duration-300 hover:scale-105"
               style={{

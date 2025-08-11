@@ -23,10 +23,8 @@ const WhyChooseUs = () => {
     }
   ];
 
-  // Preload the largest contentful image
   useEffect(() => {
     const link = document.createElement('link');
-    link.rel = 'preload';
     link.as = 'image';
     link.href = 'https://res.cloudinary.com/dujw4np0d/image/upload/f_auto,q_75,w_1000/v1750913233/DeWatermark.ai_1750851940290-_2__iyr1bg.avif';
     link.imagesrcset = `

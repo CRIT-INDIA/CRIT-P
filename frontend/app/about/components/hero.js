@@ -88,11 +88,13 @@ const AboutUsHero = () => {
       >
         <source 
           src="https://res.cloudinary.com/duz9xipfm/video/upload/v1752208306/Office_Stock_Footage_-_People_Working_As_A_Team___Group_Meeting___Business_Footage_Free_Download_vkppj8.webm" 
+          alt="Carrer page video - People Working As A Team"
           type="video/webm" 
         />
         {/* Fallback for browsers that don't support webm */}
         <source 
           src="https://res.cloudinary.com/duz9xipfm/video/upload/v1752208306/Office_Stock_Footage_-_People_Working_As_A_Team___Group_Meeting___Business_Footage_Free_Download_vkppj8.webm" 
+          alt="Carrer page video - People Working As A Team"
           type="video/mp4" 
         />
       </video>

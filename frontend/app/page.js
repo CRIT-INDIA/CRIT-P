@@ -5,36 +5,15 @@ import dynamic from 'next/dynamic';
 import { ThreeDMarquee } from "./components/ui/3d-marquee";
 import MovingClientsSection from "./components/ui/clients";
 
-
-
-function BasicExample() {
-  const images = [
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753680388/istockphoto-2004564843-1024x1024_1_x6gfh5.avif", alt: "iStock Photo 2", industry: "Manufacturing" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753687876/istockphoto-1368043872-1024x1024_1_malysw.avif", alt: "iStock Photo", industry: "Healthcare" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753680974/istockphoto-870301606-1024x1024_1_ujsq5j.avif", alt: "iStock Photo 3", industry: "IT Companies" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753681293/remove_watermark_image_20250728_111025_rjdpng.avif", alt: "Remove Watermark Image", industry: "Traders & Distributors" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753687055/istockphoto-2212531431-1024x1024-processed_lightpdf.com_wa6pjr.avif", alt: "Transformed Image 11", industry: "Education" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753684569/wmremove-transformed_13_gxy30s.avif", alt: "DeWatermark Image 1", industry: "Real Estate & Construction" },
-    { src: "https://res.cloudinary.com/dujw4np0d/image/upload/v1753678389/wmremove-transformed_12_s29fd3.avif", alt: "Transformed Image 12", industry: "Retail Industry" },
-  ];
-
-  return (
-    <div className="">
-      <CardCarousel
-        images={images}
-        autoplayDelay={2000}
-        showPagination={true}
-        showNavigation={true}
-      />
-    </div>
-  );
-}
-
 // Lazy load non-critical components
 
-const CardCarousel = dynamic(() => import('./components/ui/badge'), { 
+const BadgeModule = dynamic(() => import('./components/ui/badge'), { 
   loading: () => <div className="h-[500px] w-full bg-gray-100 animate-pulse"></div> 
 }); 
+
+const BasicExample = dynamic(() => import('./components/ui/badge').then(mod => ({ default: mod.BasicExample })), { 
+  loading: () => <div className="h-[500px] w-full bg-gray-100 animate-pulse"></div> 
+});
 
 const CustomerTestimonials = dynamic(() => import('./components/ui/review'), { 
   loading: () => <div className="h-[500px] w-full bg-gray-100 animate-pulse"></div> 

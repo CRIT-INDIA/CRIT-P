@@ -343,7 +343,7 @@ const Navbar = () => {
           {/* Top Bar */}
           <div className="flex items-center justify-between px-2 py-2 border-b border-white/10">
             <div className="flex items-center gap-2">
-              <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1751005553/CRIT-3D_cpzr1n.png" alt="Logo" className="w-8 h-8 rounded" />
+              <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1751005553/CRIT-3D_cpzr1n.png" alt="CRIT logo" className="w-8 h-8 rounded" />
               <span className="text-white font-bold text-base sm:text-lg md:text-xl">CRIT INDIA</span>
             </div>
             <button

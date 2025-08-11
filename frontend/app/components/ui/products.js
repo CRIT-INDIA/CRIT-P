@@ -461,7 +461,7 @@ const DesignClassesSection = () => {
                     </div>
                   ) : (
                     <div className="flex-grow w-full rounded-2xl mt-auto overflow-hidden bg-gray-200 flex items-center justify-center">
-                      {/* Add your image here, e.g.: <img src=... alt=... className="object-cover w-full h-full" /> */}
+
                     </div>
                   )}
                 </div>

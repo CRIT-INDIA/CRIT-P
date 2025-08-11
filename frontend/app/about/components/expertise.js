@@ -31,7 +31,7 @@ export default function AiInsightsSection() {
             {/* Hide image and gradient on mobile */}
             <div className="hidden md:block pl-10">
               <img
-                src="https://res.cloudinary.com/duz9xipfm/image/upload/v1751344095/image_3_jfnwiv.jpg"
+                src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754893434/image_3_jfnwiv_ytxas2.avif"
                 alt="Domain Knowledge Illustration"
                 className="w-full max-w-sm h-64 object-cover rounded-lg shadow-3xl border border-gray-200"
               />
@@ -89,7 +89,7 @@ export default function AiInsightsSection() {
             {/* Hide image and gradient on mobile */}
             <div className="hidden md:block pl-10">
               <img
-                src="https://res.cloudinary.com/dujw4np0d/image/upload/v1751703287/image_2_qzxt24.png"
+                src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754893479/image_2_qzxt24_j3hjus.avif"
                 alt="Team Collaboration"
                 className="w-full max-w-sm h-64 object-cover rounded-lg shadow-3xl border border-gray-200"
               />

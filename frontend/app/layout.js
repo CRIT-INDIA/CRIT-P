@@ -1,7 +1,5 @@
 'use client';
 
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/ui/Navbar";
 import Footer from "./components/ui/Footer";
@@ -14,21 +12,60 @@ import dynamic from 'next/dynamic';
 // Dynamically import TawkToWidget with SSR disabled
 const TawkToWidget = dynamic(
   () => import('./components/TawkToWidget'),
-  { ssr: false }
+  { 
+    ssr: false,
+    loading: () => null
+  }
 );
 
-const geistSans = Geist({
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-});
 
 export default function RootLayout({ children }) {
   const [hideButtons, setHideButtons] = useState(false);
 
+  // Handle scroll behavior for Tawk.to widget
   useEffect(() => {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+
+    const handleScroll = () => {
+      const footer = document.querySelector('footer');
+      if (!footer) return;
+      
+      const footerTop = footer.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Toggle widget visibility based on scroll position
+      if (window.Tawk_API && typeof window.Tawk_API.showWidget === 'function') {
+        try {
+          if (footerTop < windowHeight - 100) {
+            window.Tawk_API.hideWidget();
+          } else {
+            window.Tawk_API.showWidget();
+          }
+        } catch (error) {
+          console.error('Error toggling Tawk.to widget:', error);
+        }
+      }
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Initial check
+    handleScroll();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Handle scroll events for Tawk.to widget
+  useEffect(() => {
+    // Only run on client-side
+    if (typeof window === 'undefined') return;
+
     let lastScrollTop = 0;
     let scrollTimeout;
     
@@ -51,23 +88,32 @@ export default function RootLayout({ children }) {
       // Clear any existing timeout
       if (scrollTimeout) clearTimeout(scrollTimeout);
       
-      // Use the Tawk API to show/hide the widget
-      if (window.Tawk_API) {
-        if (shouldHide) {
-          window.Tawk_API.hideWidget();
-        } else {
-          window.Tawk_API.showWidget();
+      // Safely handle Tawk API with proper null checks
+      if (typeof window !== 'undefined' && window.Tawk_API && typeof window.Tawk_API.hideWidget === 'function' && 
+          typeof window.Tawk_API.showWidget === 'function') {
+        try {
+          if (shouldHide) {
+            window.Tawk_API.hideWidget();
+          } else {
+            window.Tawk_API.showWidget();
+          }
+        } catch (error) {
+          console.error('Error toggling Tawk.to widget:', error);
         }
       }
       
       // Set a timeout to handle cases where Tawk API isn't loaded yet
       scrollTimeout = setTimeout(() => {
-        const tawkIframe = document.querySelector('iframe[title*=Tawk]');
-        if (tawkIframe) {
-          tawkIframe.style.transition = 'opacity 0.3s, transform 0.3s';
-          tawkIframe.style.opacity = shouldHide ? '0' : '1';
-          tawkIframe.style.pointerEvents = shouldHide ? 'none' : 'auto';
-          tawkIframe.style.transform = shouldHide ? 'translateY(100%)' : 'translateY(0)';
+        try {
+          const tawkIframe = document.querySelector('iframe[title*=Tawk]');
+          if (tawkIframe) {
+            tawkIframe.style.transition = 'opacity 0.3s, transform 0.3s';
+            tawkIframe.style.opacity = shouldHide ? '0' : '1';
+            tawkIframe.style.pointerEvents = shouldHide ? 'none' : 'auto';
+            tawkIframe.style.transform = shouldHide ? 'translateY(100%)' : 'translateY(0)';
+          }
+        } catch (err) {
+          console.error('Error updating Tawk iframe styles:', err);
         }
       }, 100);
     };
@@ -191,7 +237,7 @@ export default function RootLayout({ children }) {
         <meta name="google-site-verification" content="h3ixGy5uCzHHiLl_VtBJSeORuIZAaFgdd8ftiPT5Rn4" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-[#fff5f5]`}
+        className={`antialiased min-h-screen flex flex-col bg-[#fff5f5]`}
       >
         {/* GTM noscript */}
         <noscript
@@ -210,7 +256,7 @@ export default function RootLayout({ children }) {
         
         <div className="flex-1 flex flex-col max-w-[1800px] w-full mx-auto">
           {children}
-          <SpeedInsights/>
+          
         </div>
         <Footer />
         
