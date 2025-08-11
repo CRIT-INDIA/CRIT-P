@@ -356,7 +356,7 @@ export default function CritIndiaCtaForm({ onClose }) {
       console.log('Data being sent to backend:', submitData);
       
       try {
-        const apiUrl = 'https://crit-p-2.onrender.com'; // Production backend URL
+        const apiUrl = 'https://testing-b4ap.onrender.com'; // Production backend URL
         console.log('Making request to:', `${apiUrl}/api/cta/submit`);
         const response = await fetch(`${apiUrl}/api/cta/submit`, {
           method: 'POST',
@@ -424,7 +424,7 @@ export default function CritIndiaCtaForm({ onClose }) {
           <div 
             className="sticky border-1 border-red-600 top-0 z-20 p-2 sm:p-2 text-white rounded-t-2xl relative overflow-hidden"
             style={{
-              backgroundImage: "url('https://res.cloudinary.com/dujw4np0d/image/upload/v1754477803/DeWatermark.ai_1754477790161_kvdpcm.jpg')",
+              backgroundImage: "url('https://res.cloudinary.com/duz9xipfm/image/upload/v1754887963/DeWatermark.ai_1754477790161_kvdpcm_ho9p48.avif')",
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',

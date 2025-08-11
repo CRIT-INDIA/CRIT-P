@@ -24,20 +24,16 @@ const CareerPage = () => {
     formState: { errors },
     reset,
     setValue,
-    trigger,
-    watch
+    trigger
   } = useForm({
     defaultValues: {
       fullName: '',
       position: '',
       experience: '',
       currentCtc: '',
-      message: '',
-      cv: null
+      message: ''
     }
   });
-  
-  const cvFile = watch('cv');
   
   useEffect(() => {
     // Load Vanta.js scripts
@@ -148,28 +144,95 @@ const CareerPage = () => {
     setIsSubmitting(true);
     setSubmitError('');
     
+    console.log('=== OPPORTUNITY FORM SUBMISSION START ===');
+    console.log('Current form data:', data);
+    
+    // Validate CV file
+    if (!selectedFile) {
+      setSubmitError('Please select a CV file');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // Log each field with its value and length
+    Object.entries(data).forEach(([key, value]) => {
+      if (value && key !== 'cv') {
+        console.log(`Field: ${key}, Value: ${value}, Length: ${String(value).length}`);
+      }
+    });
+    
+    console.log(`CV File: ${selectedFile.name}, Size: ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`);
+    
     try {
       // Create FormData object
       const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
+      formData.append('fullName', data.fullName?.trim() || '');
+      formData.append('desiredPosition', data.position?.trim() || '');
+      formData.append('experience', data.experience?.trim() || '');
+      formData.append('currentCTC', data.currentCtc?.trim() || '');
+      formData.append('message', data.message?.trim() || '');
+      formData.append('cv', selectedFile);
+      
+      console.log('Data being sent to backend:', {
+        fullName: data.fullName?.trim(),
+        desiredPosition: data.position?.trim(),
+        experience: data.experience?.trim(),
+        currentCTC: data.currentCtc?.trim(),
+        message: data.message?.trim(),
+        hasCv: !!selectedFile,
+        fileName: selectedFile?.name,
+        fileSize: selectedFile ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB` : 'N/A'
       });
       
-      // Here you would typically send the form data to your API
-      console.log('Form submitted:', Object.fromEntries(formData));
+      try {
+        const apiUrl = 'https://testing-b4ap.onrender.com'; // Production backend URL
+        console.log('Making request to:', `${apiUrl}/api/opportunity/submit`);
+        const response = await fetch(`${apiUrl}/api/opportunity/submit`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('Server responded with error:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData
+          });
+          throw new Error(`Server responded with status ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Response data:', result);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Reset form on success
-      reset();
-      setSelectedFile(null);
-      
-      // Show success message or redirect
-      alert('Thank you for your application! We will get back to you soon.');
+        console.log('Opportunity application submitted successfully:', result);
+        
+        // Reset form on success
+        reset();
+        setSelectedFile(null);
+        
+        // Show success message
+        alert('Thank you for your application! We will get back to you soon.');
+      } catch (error) {
+        console.error('Error submitting career application:', {
+          error: error.message,
+          stack: error.stack,
+          formData: {
+            fullName: data.fullName?.trim(),
+            position: data.position?.trim(),
+            experience: data.experience?.trim(),
+            currentCtc: data.currentCtc?.trim(),
+            message: data.message?.trim(),
+            hasCv: !!selectedFile
+          }
+        });
+        setSubmitError(`Error submitting form: ${error.message}. Please check the console for more details.`);
+      }
     } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitError('Failed to submit the form. Please try again.');
+      console.error('Error in opportunity form submission:', error);
+      setSubmitError('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -607,17 +670,6 @@ const CareerPage = () => {
                         ref={fileInputRef}
                         style={{ display: 'none' }}
                         onChange={handleFileChange}
-                        {...register('cv', { 
-                          required: 'CV is required',
-                          validate: {
-                            fileType: files => 
-                              !files[0] || ACCEPTED_FILE_TYPES.includes(files[0]?.type) || 
-                              'Invalid file type. Only PDF and Word documents are allowed.',
-                            fileSize: files => 
-                              !files[0] || files[0]?.size <= MAX_FILE_SIZE || 
-                              'File size should be less than 5MB'
-                          }
-                        })}
                       />
                       <div className="flex flex-col items-center">
                         <svg 

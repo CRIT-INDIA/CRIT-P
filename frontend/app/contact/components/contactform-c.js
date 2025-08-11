@@ -336,78 +336,102 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('=== CONTACT FORM SUBMISSION START ===');
-    console.log('Form data:', formData);
+    console.log('Current formData:', formData);
     
-    const trimmedData = {
-      ...formData,
-      name: formData.name.trim(),
-      email: formData.email.trim()
-    };
+    // Log each field with its value and length
+    Object.entries(formData).forEach(([key, value]) => {
+      console.log(`Field: ${key}, Value: ${value}, Length: ${String(value).length}`);
+    });
     
-    console.log('Trimmed data:', trimmedData);
-    
+    // Validate all fields
     const newErrors = {};
-    Object.keys(trimmedData).forEach(key => {
+    Object.keys(formData).forEach(key => {
       if (key !== 'countryCode') {
-        newErrors[key] = validateField(key, trimmedData[key]);
+        newErrors[key] = validateField(key, formData[key]);
       }
     });
     
     console.log('Validation errors:', newErrors);
-    setErrors(newErrors);
-
-    console.log('All errors empty?', Object.values(newErrors).every(error => error === ''));
     
-    if (Object.values(newErrors).every(error => error === '')) {
-      console.log('Validation passed, sending to backend...');
+    if (Object.values(newErrors).some(error => error !== '')) {
+      console.log('Validation failed, not submitting to backend');
+      console.log('Failed fields:', Object.keys(newErrors).filter(key => newErrors[key] !== ''));
+      setErrors(newErrors);
+      return;
+    }
+    
+    console.log('Client-side validation passed, preparing to send to backend');
+    
+    try {
+      const submitData = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        companyName: formData.companyName.trim(),
+        countryCode: formData.countryCode,
+        phoneNumber: formData.phoneNumber.trim(),
+        message: formData.message.trim(),
+        service: formData.service
+      };
+      
+      console.log('Data being sent to backend:', submitData);
+      
       try {
-        const submitData = {
-          name: trimmedData.name,
-          email: trimmedData.email,
-          companyName: trimmedData.companyName,
-          countryCode: formData.countryCode,
-          phoneNumber: formData.phoneNumber,
-          message: trimmedData.message,
-          service: trimmedData.service
-        };
-        
-        console.log('Sending contact form data to backend:', submitData);
-        
-        const response = await fetch('http://localhost:5000/api/contact/submit', {
+        const apiUrl = 'https://testing-b4ap.onrender.com'; // Production backend URL
+        console.log('Making request to:', `${apiUrl}/api/contact/submit`);
+        const response = await fetch(`${apiUrl}/api/contact/submit`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
+          credentials: 'include', // Include cookies and HTTP authentication data
+          mode: 'cors', // Enable CORS mode
           body: JSON.stringify(submitData)
         });
         
-        const result = await response.json();
+        console.log('Response status:', response.status);
         
-        if (result.success) {
-          setIsSubmitted(true);
-          alert('Form submitted successfully!');
-          
-          // Reset form after 3 seconds
-          setTimeout(() => {
-            setIsSubmitted(false);
-            setFormData({
-              name: '',
-              email: '',
-              companyName: '',
-              countryCode: '+91',
-              phoneNumber: '',
-              message: '',
-              service: ''
-            });
-          }, 3000);
-        } else {
-          console.error('Contact form submission failed:', result);
-          alert('Form submission failed. Please try again.');
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('Server responded with error:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData
+          });
+          throw new Error(`Server responded with status ${response.status}`);
         }
+        
+        const result = await response.json();
+        console.log('Response data:', result);
+      
+        console.log('Contact form submitted successfully:', result);
+        setIsSubmitted(true);
+        alert('Form submitted successfully!');
+        
+        // Reset form after 3 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({
+            name: '',
+            email: '',
+            companyName: '',
+            countryCode: '+91',
+            phoneNumber: '',
+            message: '',
+            service: ''
+          });
+        }, 3000);
       } catch (error) {
-        console.error('Error submitting contact form:', error);
-        alert('Error submitting form. Please try again.');
+        console.error('Error submitting contact form:', {
+          error: error.message,
+          stack: error.stack,
+          formData: submitData
+        });
+        alert(`Error submitting form: ${error.message}. Please check the console for more details.`);
       }
+    } catch (error) {
+      console.error('Error in contact form submission:', error);
+      alert('An unexpected error occurred. Please try again.');
     }
   };
 

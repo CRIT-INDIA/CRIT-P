@@ -139,7 +139,17 @@ const CustomerTestimonials = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('=== REVIEW FORM SUBMISSION START ===');
+    console.log('Current formData:', formData);
+    console.log('Current rating:', rating);
+    console.log('Selected file:', selectedFile);
     
+    // Log each field with its value and length
+    Object.entries(formData).forEach(([key, value]) => {
+      console.log(`Field: ${key}, Value: ${value}, Length: ${String(value).length}`);
+    });
+    
+    // Validate required fields
     if (rating === 0) {
       alert('Please select a rating');
       return;
@@ -151,31 +161,57 @@ const CustomerTestimonials = () => {
       return;
     }
 
+    console.log('Client-side validation passed, preparing to send to backend');
     setIsSubmitting(true);
     
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('name', formData.name);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('position', formData.position);
-      formDataToSend.append('company', formData.company);
-      formDataToSend.append('review', formData.review);
+      formDataToSend.append('name', formData.name.trim());
+      formDataToSend.append('email', formData.email.trim().toLowerCase());
+      formDataToSend.append('position', formData.position.trim());
+      formDataToSend.append('company', formData.company.trim());
+      formDataToSend.append('review', formData.review.trim());
       formDataToSend.append('rating', rating.toString());
       
       if (selectedFile) {
         formDataToSend.append('profilePicture', selectedFile);
       }
       
-      console.log('Sending review form data to backend');
-      
-      const response = await fetch('http://localhost:5000/api/review/submit', {
-        method: 'POST',
-        body: formDataToSend
+      console.log('Data being sent to backend:', {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        position: formData.position.trim(),
+        company: formData.company.trim(),
+        review: formData.review.trim(),
+        rating: rating.toString(),
+        hasFile: !!selectedFile,
+        fileName: selectedFile?.name,
+        fileSize: selectedFile ? `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB` : 'N/A'
       });
       
-      const result = await response.json();
+      try {
+        const apiUrl = 'https://testing-b4ap.onrender.com'; // Production backend URL
+        console.log('Making request to:', `${apiUrl}/api/review/submit`);
+        const response = await fetch(`${apiUrl}/api/review/submit`, {
+          method: 'POST',
+          body: formDataToSend
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          console.error('Server responded with error:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData
+          });
+          throw new Error(`Server responded with status ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Response data:', result);
       
-      if (result.success) {
         console.log('Review submitted successfully:', result);
         setShowSuccess(true);
         
@@ -196,13 +232,25 @@ const CustomerTestimonials = () => {
           setShowReviewForm(false);
           setShowSuccess(false);
         }, 3000);
-      } else {
-        console.error('Review submission failed:', result);
-        alert(result.message || 'Form submission failed. Please try again.');
+      } catch (error) {
+        console.error('Error submitting review form:', {
+          error: error.message,
+          stack: error.stack,
+          formData: {
+            name: formData.name.trim(),
+            email: formData.email.trim().toLowerCase(),
+            position: formData.position.trim(),
+            company: formData.company.trim(),
+            review: formData.review.trim(),
+            rating: rating.toString(),
+            hasFile: !!selectedFile
+          }
+        });
+        alert(`Error submitting form: ${error.message}. Please check the console for more details.`);
       }
     } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('Error submitting form. Please try again.');
+      console.error('Error in review form submission:', error);
+      alert('An unexpected error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -525,67 +573,7 @@ const CustomerTestimonials = () => {
                 </div>
 
                 {/* Profile Picture Upload */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Profile Picture (Optional)
-                  </label>
-                  
-                  {filePreview ? (
-                    /* File Preview */
-                    <div className="border border-gray-300 rounded-lg p-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100">
-                          <img 
-                            src={filePreview} 
-                            alt="Profile preview" 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">
-                            {selectedFile?.name}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {selectedFile && `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`}
-                          </p>
-                        </div>
-                        <motion.button
-                          type="button"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={removeFile}
-                          className="text-red-600 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
-                        >
-                          <X className="w-5 h-5" />
-                        </motion.button>
-                      </div>
-                    </div>
-                  ) : (
-                    /* Upload Area */
-                    <motion.div 
-                      whileHover={{ borderColor: '#dc2626' }}
-                      onClick={triggerFileUpload}
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer transition-colors duration-200 hover:bg-gray-50"
-                    >
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-600 mb-1">
-                        Click to upload or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, JPEG, GIF up to 5MB
-                      </p>
-                    </motion.div>
-                  )}
-                  
-                  {/* Hidden File Input */}
-                  <input
-                    id="file-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </div>
+               
 
                 {/* Privacy Notice */}
                 <div className="bg-gray-50 rounded-lg p-4">

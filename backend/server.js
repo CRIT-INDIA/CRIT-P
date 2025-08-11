@@ -1,12 +1,14 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-
+// Import dependencies
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 
-const _dirname = path.resolve();
+// Create Express app
+const app = express();
+
+// Load environment variables
+dotenv.config({ path: './environment.env' });
 
 // Import routes
 const contactRoutes = require('./routes/contact');
@@ -15,13 +17,10 @@ const careerRoutes = require('./routes/career');
 const opportunityRoutes = require('./routes/opportunity');
 const reviewRoutes = require('./routes/review');
 
-// Load environment variables
-dotenv.config({ path: './environment.env' });
-
-const app = express();
+// Port config
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS
+// Allowed origins for CORS
 const allowedOrigins = [
   'http://localhost:3000',
   'https://crit-p-wovp.vercel.app',
@@ -30,47 +29,91 @@ const allowedOrigins = [
   'https://crit-p-2.onrender.com/api/*'
 ];
 
+// CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      console.error('CORS Error:', { origin, allowedOrigins });
-      return callback(new Error(msg), false);
+    // Check against allowed origins
+    const allowed = allowedOrigins.some(o => {
+      if (o.includes('*')) {
+        const regex = new RegExp(o.replace('*', '.*'));
+        return regex.test(origin);
+      }
+      return o === origin;
+    });
+    
+    if (allowed || process.env.NODE_ENV === 'development') {
+      return callback(null, true);
     }
-    return callback(null, true);
+    
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    console.error('CORS Error:', { origin, allowedOrigins });
+    return callback(new Error(msg), false);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'X-Requested-With',
+    'Accept',
+    'Origin',
+    'X-Auth-Token'
+  ],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
   credentials: true,
-  optionsSuccessStatus: 200,
-  preflightContinue: false
+  maxAge: 86400, // 24 hours
+  optionsSuccessStatus: 200
 };
 
 // Middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
+app.options('*', cors(corsOptions)); // Pre-flight requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/',(req,res)=>{
-    res.send({
-        activeStatus:true,
-        error:false,
-    })
-})
+// Simple home route
+app.get('/', (req, res) => {
+  res.send({
+    activeStatus: true,
+    error: false
+  });
+});
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crit_forms', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crit_forms', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      family: 4, // Use IPv4, skip trying IPv6
+    });
+    
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    
+    // Connection events for better debugging
+    mongoose.connection.on('error', err => {
+      console.error('MongoDB connection error:', err);
+    });
+    
+    mongoose.connection.on('disconnected', () => {
+      console.log('MongoDB disconnected. Reconnecting...');
+      connectDB(); // Attempt to reconnect
+    });
+    
+  } catch (err) {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  }
+};
 
-// Routes
+// Connect to the database
+connectDB();
+
+// Register API routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/cta', ctaRoutes);
 app.use('/api/career', careerRoutes);
@@ -82,16 +125,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'CRIT Backend API is running' });
 });
 
-// Error handling middleware
+// Central error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Global Error Handler:', err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.use(express.static(path.join(_dirname, '/frontend/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(_dirname, '/frontend/dist/index.html'));
-
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});
