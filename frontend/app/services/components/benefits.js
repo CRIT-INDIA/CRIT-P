@@ -53,7 +53,13 @@ const ICONS = {
   'Performance Optimization': Zap,
   'Accelerated Deployment': Rocket,
   'Compliance Validation': Shield,
-  'User Experience Excellence': Smartphone
+  'User Experience Excellence': Smartphone,
+  'Data-Driven Decision Making': BarChart3,
+  'Improved Operational Efficiency': TrendingUp,
+  'Enhanced Customer Experience': Users,
+  'Competitive Advantage': Target,
+  'Risk Management': Shield,
+  'Scalable Analytics Platform': Layers
 };
 
 function getIconComponent(title) {
@@ -95,12 +101,39 @@ export default function BenefitsSection({ serviceName }) {
         const data = await response.json();
 
         const normalizedProp = normalizeServiceName(serviceName);
-        const serviceKey = Object.keys(data.benefits).find(key =>
-          normalizeServiceName(key) === normalizedProp
-        );
-
-        if (serviceKey && data.benefits[serviceKey]?.length > 0) {
-          const formatted = data.benefits[serviceKey].map(benefit => ({
+        
+        // First try to find in root level (for Data Analytics Services)
+        let serviceBenefits = null;
+        
+        // Check if the service name exists as a direct key in the root
+        if (data[serviceName] && Array.isArray(data[serviceName])) {
+          serviceBenefits = data[serviceName];
+        } 
+        // If not, try to find a matching key in the root
+        else {
+          const matchingKey = Object.keys(data).find(key => {
+            const isMatch = key !== 'benefits' && 
+                          Array.isArray(data[key]) && 
+                          normalizeServiceName(key) === normalizedProp;
+            return isMatch;
+          });
+          
+          if (matchingKey) {
+            serviceBenefits = data[matchingKey];
+          }
+        }
+        
+        // If still not found, try the nested benefits object
+        if (!serviceBenefits && data.benefits) {
+          const serviceKey = Object.keys(data.benefits).find(key => {
+            const isMatch = normalizeServiceName(key) === normalizedProp;
+            return isMatch;
+          });
+          serviceBenefits = serviceKey ? data.benefits[serviceKey] : null;
+        }
+        
+        if (Array.isArray(serviceBenefits) && serviceBenefits.length > 0) {
+          const formatted = serviceBenefits.map(benefit => ({
             title: benefit.title || 'Benefit',
             description: benefit.description || '',
             detailedDescription: benefit.detailedDescription || (benefit.description ? [benefit.description] : ['No detailed description available.']),

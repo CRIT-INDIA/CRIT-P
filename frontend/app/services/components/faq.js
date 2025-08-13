@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function FaqSection1() {
+export default function FaqSection1({ serviceName }) {
     const [activeId, setActiveId] = useState('1-1');
     const [hoveredId, setHoveredId] = useState(null);
     const [isAutoCycling, setIsAutoCycling] = useState(true);
@@ -13,6 +13,10 @@ export default function FaqSection1() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [categoryLogos, setCategoryLogos] = useState({});
+    const [categoryServiceImages, setCategoryServiceImages] = useState({});
+    
+    
 
     // Fetch FAQ data from JSON file
     useEffect(() => {
@@ -26,39 +30,63 @@ export default function FaqSection1() {
                 
                 const transformedFaqs = [];
                 const categoriesSet = new Set();
-                
-                const serviceCategory = Object.values(data)[0];
-                
+                const logos = {};
+                const serviceImages = {};
+
+                // Determine which top-level group to read from
+                // If a serviceName is provided and exists as a top-level key, use that.
+                // Else fallback to the first top-level key (SAP Services FAQ)
+                const topLevelKey = serviceName && data[serviceName]
+                    ? serviceName
+                    : Object.keys(data)[0];
+
+                const serviceCategory = data[topLevelKey];
+
                 Object.entries(serviceCategory).forEach(([category, questions], catIndex) => {
+                    // extract logo and serviceImage if present
+                    if (questions && typeof questions.logo === 'string') {
+                        logos[category] = questions.logo;
+                    }
+                    if (questions && typeof questions.serviceImage === 'string') {
+                        serviceImages[category] = questions.serviceImage;
+                    }
+
                     categoriesSet.add(category);
-                    
-                    Object.entries(questions).forEach(([qKey, qData], qIndex) => {
-                        const id = `${catIndex + 1}-${qIndex + 1}`;
-                        const answer = Array.isArray(qData.answer) 
-                            ? qData.answer.map((item, i) => (
-                                <React.Fragment key={i}>
-                                    {i > 0 && <br />}
-                                    • {item}
-                                </React.Fragment>
-                            ))
-                            : qData.answer;
-                            
-                        transformedFaqs.push({
-                            id,
-                            category,
-                            q: qData.question,
-                            a: answer
-                        });
-                    });
+
+                    Object.entries(questions)
+                        .filter(([k]) => k !== 'logo' && k !== 'serviceImage')
+                        .forEach(([qKey, qData], qIndex) => {
+                         const id = `${catIndex + 1}-${qIndex + 1}`;
+                         const answer = Array.isArray(qData.answer) 
+                             ? qData.answer.map((item, i) => (
+                                 <React.Fragment key={i}>
+                                     {i > 0 && <br />}
+                                     • {item}
+                                 </React.Fragment>
+                             ))
+                             : qData.answer;
+                             
+                         transformedFaqs.push({
+                             id,
+                             category,
+                             q: qData.question,
+                             a: answer
+                         });
+                     });
                 });
                 
                 const categoriesList = Array.from(categoriesSet);
                 setFaqs(transformedFaqs);
                 setCategories(categoriesList);
+                setCategoryLogos(logos);
+                setCategoryServiceImages(serviceImages);
                 
                 if (categoriesList.length > 0) {
-                    setActiveCategory(categoriesList[0]);
-                    const firstFaq = transformedFaqs.find(faq => faq.category === categoriesList[0]);
+                    // Only update active category if it's not set or not in the new categories
+                    if (!activeCategory || !categoriesList.includes(activeCategory)) {
+                        setActiveCategory(categoriesList[0]);
+                    }
+                    const firstFaq = transformedFaqs.find(faq => faq.category === (activeCategory || categoriesList[0]));
                     if (firstFaq) {
                         setActiveId(firstFaq.id);
                     }
@@ -73,7 +101,7 @@ export default function FaqSection1() {
         };
 
         fetchFaqs();
-    }, []);
+    }, [activeCategory, serviceName]);
   
     const filteredFaqs = useMemo(() => {
         return faqs.filter(faq => faq.category === activeCategory);
@@ -238,6 +266,8 @@ export default function FaqSection1() {
                             </svg>
                         </h2>
                         
+                        
+
                         {/* Category Tabs */}
                         <div className="flex flex-wrap justify-center gap-2 mb-8">
                             {categories.map((category) => (
@@ -264,7 +294,7 @@ export default function FaqSection1() {
                         </div>
                     </motion.div>
                 </div>
-  
+
                 {/* FAQ Container */}
                 <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">
                     {/* Left Side - Questions */}
@@ -315,7 +345,7 @@ export default function FaqSection1() {
                                             >
                                                 {faq.id}
                                             </motion.div>
-  
+
                                             {/* Question */}
                                             <div className="flex-1">
                                                 <motion.p
@@ -349,7 +379,7 @@ export default function FaqSection1() {
                                                     {faq.q}
                                                 </motion.h3>
                                             </div>
-  
+
                                             {/* Arrow */}
                                             <motion.svg
                                                 variants={arrowVariants}
@@ -379,109 +409,119 @@ export default function FaqSection1() {
                             );
                         })}
                     </div>
-  
+
                     {/* Right Side - Answer Display */}
-                    <div className="lg:sticky lg:top-6 mt-8 lg:mt-26">
-                        <AnimatePresence mode="wait">
-                            {faqs.map((faq) => (
-                                activeId === faq.id && (
-                                    <motion.div
-                                        key={faq.id}
-                                        variants={answerVariants}
-                                        initial="initial"
-                                        animate="animate"
-                                        exit="exit"
-                                        className="relative"
+                    <div className="lg:sticky lg:top-6 mt-8 lg:mt-1">
+                        {faqs.map((faq) => (
+                            activeId === faq.id && (
+                                <div key={faq.id} className="relative">
+                                    {/* Background Decoration */}
+                                    <motion.div 
+                                        className="absolute -inset-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-2xl opacity-50 blur-2xl"
+                                        animate={{
+                                            scale: [1, 1.05, 1],
+                                            opacity: [0.3, 0.5, 0.3]
+                                        }}
+                                        transition={{
+                                            duration: 4,
+                                            repeat: Infinity,
+                                            ease: "easeInOut"
+                                        }}
+                                    />
+                                    
+                                    <motion.div 
+                                        className="relative bg-white rounded-2xl p-7 shadow-2xl border-2 border-red-100"
+                                        initial={{ scale: 0.95 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ duration: 0.4, ease: "easeOut" }}
                                     >
-                                        {/* Background Decoration */}
+                                        {/* Top Pattern */}
                                         <motion.div 
-                                            className="absolute -inset-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-2xl opacity-50 blur-2xl"
+                                            className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-red-500 to-pink-500 rounded-full opacity-10 blur-2xl"
                                             animate={{
-                                                scale: [1, 1.05, 1],
-                                                opacity: [0.3, 0.5, 0.3]
+                                                x: [0, 10, 0],
+                                                y: [0, -5, 0]
                                             }}
                                             transition={{
-                                                duration: 4,
+                                                duration: 6,
                                                 repeat: Infinity,
                                                 ease: "easeInOut"
                                             }}
                                         />
                                         
+                                        {/* Category Badge */}
                                         <motion.div 
-                                            className="relative bg-white rounded-2xl p-7 shadow-2xl border-2 border-red-100"
-                                            initial={{ scale: 0.95 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ duration: 0.4, ease: "easeOut" }}
+                                            className="inline-flex items-center gap-1.5 mb-5 bg-red-50 px-4 py-2 rounded-full"
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.1, duration: 0.4 }}
                                         >
-                                            {/* Top Pattern */}
                                             <motion.div 
-                                                className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-red-500 to-pink-500 rounded-full opacity-10 blur-2xl"
-                                                animate={{
-                                                    x: [0, 10, 0],
-                                                    y: [0, -5, 0]
-                                                }}
-                                                transition={{
-                                                    duration: 6,
+                                                className="w-1.5 h-1.5 bg-red-500 rounded-full"
+                                                animate={{ scale: [1, 1.2, 1] }}
+                                                transition={{ 
+                                                    duration: 2, 
                                                     repeat: Infinity,
-                                                    ease: "easeInOut"
+                                                    ease: "easeInOut" 
                                                 }}
                                             />
+                                            <span className="text-xs font-semibold tracking-wider text-red-700">
+                                                {faq.category}
+                                            </span>
+                                        </motion.div>
+
+                                        {/* Question Title */}
+                                        <motion.h3 
+                                            className="text-xl font-bold text-gray-900 mb-3"
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.2, duration: 0.4 }}
+                                        >
+                                            {faq.q}
+                                        </motion.h3>
+
+                                        {/* Answer */}
+                                        <motion.div 
+                                            className="text-gray-600 leading-relaxed text-base"
+                                            initial={{ opacity: 0, y: 15 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.3, duration: 0.5 }}
+                                        >
+                                            {faq.a}
+                                        </motion.div>
+
+                                        {/* Action Button */}
+                                        <motion.div 
+                                            className="mt-7 flex items-center gap-3"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.4, duration: 0.4 }}
+                                        >
                                             
-                                            {/* Category Badge */}
-                                            <motion.div 
-                                                className="inline-flex items-center gap-1.5 mb-5 bg-red-50 px-4 py-2 rounded-full"
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ delay: 0.1, duration: 0.4 }}
-                                            >
-                                                <motion.div 
-                                                    className="w-1.5 h-1.5 bg-red-500 rounded-full"
-                                                    animate={{ scale: [1, 1.2, 1] }}
-                                                    transition={{ 
-                                                        duration: 2, 
-                                                        repeat: Infinity,
-                                                        ease: "easeInOut" 
-                                                    }}
-                                                />
-                                                <span className="text-xs font-semibold tracking-wider text-red-700">
-                                                    {faq.category}
-                                                </span>
-                                            </motion.div>
-  
-                                            {/* Question Title */}
-                                            <motion.h3 
-                                                className="text-xl font-bold text-gray-900 mb-3"
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.2, duration: 0.4 }}
-                                            >
-                                                {faq.q}
-                                            </motion.h3>
-  
-                                            {/* Answer */}
-                                            <motion.div 
-                                                className="text-gray-600 leading-relaxed text-base"
-                                                initial={{ opacity: 0, y: 15 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.3, duration: 0.5 }}
-                                            >
-                                                {faq.a}
-                                            </motion.div>
-  
-                                            {/* Action Button */}
-                                            <motion.div 
-                                                className="mt-7 flex items-center gap-3"
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                transition={{ delay: 0.4, duration: 0.4 }}
-                                            >
-                                                
-                                            </motion.div>
                                         </motion.div>
                                     </motion.div>
-                                )
-                            ))}
-                        </AnimatePresence>
+                                    
+                                    {/* Service Image Container below the answer card */}
+                                    {categoryServiceImages[faq.category] && (
+                                        <div className="mt-6">
+                                            <div className="w-full bg-white rounded-2xl p-6 shadow-xl border-2 border-red-100">
+                                                <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+                                                    {faq.category} Service
+                                                </h4>
+                                                <div className="flex items-center justify-center">
+                                                    <img
+                                                        src={categoryServiceImages[faq.category]}
+                                                        alt={`${faq.category} service image`}
+                                                        className="w-full h-64 object-cover rounded-xl shadow-lg"
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        ))}
                     </div>
                 </div>
             </div>

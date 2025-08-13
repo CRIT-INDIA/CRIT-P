@@ -1,13 +1,14 @@
+
 export const metadata = {
-  title: "critindia - Connecting roots of SAP",
-  description: "Crit India is in SAP implementation and support. Critindia provides SAP solution and services across entire SAP range of technology.",
+  title: "Careers at Connecting Roots | Join Our SAP Consulting Team - critindia",
+  description: "Join critindia's dynamic team of SAP professionals. Explore exciting career opportunities in SAP implementation, consulting, and support. Build your career with India's leading SAP consulting firm.",
   alternates: {
-    canonical: "https://www.critindia.com/"
+    canonical: "https://www.critindia.com/career"
   },
   openGraph: {
-    title: "critindia : Connecting roots of SAP",
-    description: "Critindia (Connecting Roots IT) is a Pune-based SAP consulting firm delivering end-to-end solutions across SAP S/4HANA, Ariba, SuccessFactors, Hybris, BusinessObjects, and Concur. With expertise in implementation, Rollout , integration, migration, automation, and testing, we streamline processes and drive real-time visibility. Our certified consultants design tailored roadmaps, execute seamless deployments, and provide comprehensive training and support. Committed to reliability, integrity, and innovation, critindia helps businesses run simple, grow faster, and thrive in a data-driven world.",
-    url: "https://www.critindia.com/",
+    title: "Careers at Connecting Roots | Join Our SAP Consulting Team - critindia",
+    description: "Join critindia's dynamic team of SAP professionals. Explore exciting career opportunities in SAP implementation, consulting, and support. Build your career with India's leading SAP consulting firm.",
+    url: "https://www.critindia.com/career",
     siteName: "critindia",
     images: [
       {
@@ -22,8 +23,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'critindia : Connecting roots of SAP',
-    description: 'Critindia (Connecting Roots IT) is a Pune-based SAP consulting firm delivering end-to-end solutions across SAP S/4HANA, Ariba, SuccessFactors, Hybris, BusinessObjects, and Concur. With expertise in implementation, Rollout , integration, migration, automation, and testing, we streamline processes and drive real-time visibility. Our certified consultants design tailored roadmaps, execute seamless deployments, and provide comprehensive training and support. Committed to reliability, integrity, and innovation, Critindia helps businesses run simple, grow faster, and thrive in a data-driven world.',
+    title: 'Careers at Connecting Roots | Join Our SAP Consulting Team - critindia',
+    description: 'Join critindia\'s dynamic team of SAP professionals. Explore exciting career opportunities in SAP implementation, consulting, and support. Build your career with India\'s leading SAP consulting firm.',
     images: ['https://res.cloudinary.com/duz9xipfm/image/upload/v1753937310/CRIT-3D_cpzr1n_1_efzl5o.avif'],
   },
   other: {

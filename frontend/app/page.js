@@ -58,6 +58,10 @@ export default function Home() {
   if (!isClient) {
     return (
       <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5] min-h-screen">
+        {/* SEO H1 - Only for search engines */}
+        <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+        Transforming Business Through SAP Excellence
+        </h1>
         <div className="h-screen w-full bg-gray-100 animate-pulse"></div>
       </div>
     );
@@ -65,6 +69,7 @@ export default function Home() {
 
   return (
     <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5]">
+      
       {/* Critical components rendered immediately */}
       <div className="relative h-* min-h-[400px] overflow-hidden">
         <ThreeDMarquee />

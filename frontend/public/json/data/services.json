@@ -510,6 +510,66 @@
               "description": "Validate end-user workflows and interfaces to ensure intuitive, efficient, and error-free user experiences across all SAP applications."
             }
           ]
+        },
+        {
+          "image": "https://res.cloudinary.com/dujw4np0d/image/upload/v1754989709/DeWatermark.ai_1754989572242_juarfu.avif",
+          "title": "Data Analytics Services",
+          "meta_title": "Data Analytics Services | Business Intelligence & Insights - Connecting Roots",
+          "seo_description": "Transform your business data into actionable insights with our comprehensive Data Analytics Services. Drive better decision-making with advanced analytics, AI, and machine learning.",
+          "h1": "Data Analytics Services for Data-Driven Decision Making",
+          "overview": "In today's data-driven world, businesses that leverage analytics gain a significant competitive advantage. Our Data Analytics Services help organizations transform raw data into meaningful insights that drive growth, efficiency, and innovation. We combine industry expertise with cutting-edge technologies to deliver comprehensive analytics solutions tailored to your business needs. Unlock the full potential of your data with our end-to-end analytics solutions, from data integration and warehousing to advanced analytics and visualization. Our team of certified data scientists and analytics experts work closely with your organization to understand your unique challenges and objectives, ensuring that our solutions deliver measurable business value. Whether you're looking to optimize operations, enhance customer experiences, or identify new revenue streams, our data-driven approach provides the clarity and confidence needed to make informed decisions that drive sustainable growth.",
+          "features": [
+            {
+              "title": "Business Intelligence",
+              "description": "Transform raw data into actionable business insights with our comprehensive BI solutions, including dashboards, reports, and data visualization."
+            },
+            {
+              "title": "Advanced Analytics",
+              "description": "Leverage predictive and prescriptive analytics to uncover hidden patterns, forecast trends, and make data-driven decisions with confidence."
+            },
+            {
+              "title": "Data Integration",
+              "description": "Seamlessly integrate data from multiple sources into a unified view, ensuring data consistency and accessibility across your organization."
+            },
+            {
+              "title": "Data Warehousing",
+              "description": "Build scalable and efficient data warehouses that serve as a single source of truth for all your analytics needs."
+            },
+            {
+              "title": "AI & Machine Learning",
+              "description": "Implement AI and machine learning models to automate processes, predict outcomes, and gain deeper insights from your data."
+            },
+            {
+              "title": "Real-time Analytics",
+              "description": "Make faster decisions with real-time data processing and analytics that deliver insights when they matter most."
+            }
+          ],
+          "benefits": [
+            {
+              "title": "Informed Decision Making",
+              "description": "Make data-driven decisions based on accurate, timely, and relevant insights that drive business growth and efficiency."
+            },
+            {
+              "title": "Competitive Advantage",
+              "description": "Gain a competitive edge by uncovering hidden opportunities and optimizing business processes through advanced analytics."
+            },
+            {
+              "title": "Operational Efficiency",
+              "description": "Streamline operations and reduce costs by identifying inefficiencies and optimizing business processes with data insights."
+            },
+            {
+              "title": "Improved Customer Experience",
+              "description": "Understand customer behavior and preferences to deliver personalized experiences and enhance customer satisfaction."
+            },
+            {
+              "title": "Scalable Solutions",
+              "description": "Our analytics solutions are designed to grow with your business, ensuring you can handle increasing data volumes and complexity."
+            },
+            {
+              "title": "Regulatory Compliance",
+              "description": "Ensure compliance with data governance and regulatory requirements through proper data management and reporting."
+            }
+          ]
         }
       ]
     }

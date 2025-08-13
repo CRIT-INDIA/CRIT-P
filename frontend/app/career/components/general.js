@@ -144,7 +144,6 @@ const CareerPage = () => {
     setIsSubmitting(true);
     setSubmitError('');
     
-    console.log('=== OPPORTUNITY FORM SUBMISSION START ===');
     console.log('Current form data:', data);
     
     // Validate CV file
@@ -273,9 +272,9 @@ const CareerPage = () => {
             
             
             <div className="relative z-10 ">
-              <h2 className="text-2xl md:text-3xl text-gray font-bold mb-4">
+              <h1 className="text-2xl md:text-3xl text-gray font-bold mb-4">
                 Looking for the Best IT Job?
-              </h2>
+              </h1>
               <p className="text-base md:text-lg mb-4 text-gray-400 max-w-2xl mx-auto leading-relaxed">
                 Join a team that thrives on innovation, creativity, and collaboration. At CRIT, we empower individuals to grow while building solutions that make an impact. Discover your next big opportunity today!
               </p>

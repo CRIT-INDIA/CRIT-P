@@ -40,6 +40,10 @@ const services = [
   {
     name: "SAP Testing Services",
     slug: "testing"
+  },
+  {
+    name: "Data Analytics",
+    slug: "data-analytics"
   }
 ];
 
@@ -176,7 +180,8 @@ const createServiceSlug = (name) => {
     'SAP Integration Services': 'sap-integration-services',
     'SAP Migration Services': 'sap-migration-services',
     'SAP Automation Services': 'sap-automation-services',
-    'SAP Testing Services': 'sap-testing-services'
+    'SAP Testing Services': 'sap-testing-services',
+    'Data Analytics': 'data-analytics'
   };
   
   // Return the mapped slug or fallback to the old behavior

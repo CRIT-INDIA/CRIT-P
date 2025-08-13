@@ -41,6 +41,27 @@
         "meta_title": "SAP Concur Integration Services | Travel & Expense Automation",
         "seo_description": "Automate and manage travel and expense processes with SAP Concur. We help businesses streamline compliance and cost control.",
         "on_page_copy": "SAP Concur automates travel, expense, and invoice management, giving companies better visibility into spending. Connecting Roots supports SAP Concur deployment and integration to help finance teams improve accuracy, reduce fraud, and ensure policy compliance."
+      },
+      {
+        "name": "SAP Business One",
+        "slug": "sap-b1-products",
+        "meta_title": "SAP Business One Implementation | Complete SME Management Solution",
+        "seo_description": "Streamline your small to mid-sized business operations with SAP Business One. We provide implementation, customization, and support services for comprehensive business management.",
+        "on_page_copy": "SAP Business One is a comprehensive business management solution designed specifically for small and medium-sized enterprises. Connecting Roots delivers B1 implementation services that integrate financial management, sales, customer relationships, inventory, and operations in one accessible platform, enabling growing businesses to gain immediate control and visibility across all aspects of their operations."
+      },
+      {
+        "name": "Data Science Solutions",
+        "slug": "data-science-solutions",
+        "meta_title": "Enterprise Data Science Solutions | Predictive Analytics & ML",
+        "seo_description": "Transform your business with our data science solutions. We help organizations implement machine learning, predictive analytics, and AI to drive strategic decision-making.",
+        "on_page_copy": "Our Data Science Solutions transform raw data into strategic business assets through advanced analytics, machine learning, and AI-powered insights. Connecting Roots helps organizations uncover hidden patterns, predict future trends, and optimize decision-making processes with comprehensive data science implementation, from data preparation to model deployment."
+      },
+      {
+        "name": "Data Analytics Platform",
+        "slug": "data-analytics-platform",
+        "meta_title": "Business Intelligence & Data Analytics Services | Visualization Experts",
+        "seo_description": "Unlock the power of your data with our analytics platform services. We help businesses implement self-service analytics, interactive dashboards, and reporting solutions.",
+        "on_page_copy": "Our Data Analytics Platform democratizes data access across your organization, enabling users at all levels to explore, visualize, and derive insights without advanced technical skills. Connecting Roots implements analytics solutions that transform complex data into clear, actionable intelligence through intuitive dashboards, interactive reports, and self-service capabilities."
       }
     ]
   }

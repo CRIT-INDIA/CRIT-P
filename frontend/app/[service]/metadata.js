@@ -1,31 +1,110 @@
-export const metadata = {
-  title: 'critindia - Connecting roots of SAP',
-  description: 'Crit India is in SAP implementation and support. Critindia provides SAP solution and services across entire SAP range of technology.',
-  metadataBase: new URL('https://www.critindia.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: 'critindia : Connecting roots of SAP',
-    description: 'Critindia (Connecting Roots IT) is a Pune-based SAP consulting firm delivering end-to-end solutions across SAP S/4HANA, Ariba, SuccessFactors, Hybris, BusinessObjects, and Concur. With expertise in implementation, Rollout , integration, migration, automation, and testing, we streamline processes and drive real-time visibility. Our certified consultants design tailored roadmaps, execute seamless deployments, and provide comprehensive training and support. Committed to reliability, integrity, and innovation, critindia helps businesses run simple, grow faster, and thrive in a data-driven world.',
-    url: '/',
-    siteName: 'critindia',
-    images: [
-      {
-        url: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753937310/CRIT-3D_cpzr1n_1_efzl5o.avif',
-        width: 150,
-        height: 40,
-        type: 'image/avif',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'critindia : Connecting roots of SAP',
-    description: 'Critindia (Connecting Roots IT) is a Pune-based SAP consulting firm delivering end-to-end solutions across SAP S/4HANA, Ariba, SuccessFactors, Hybris, BusinessObjects, and Concur. With expertise in implementation, Rollout , integration, migration, automation, and testing, we streamline processes and drive real-time visibility. Our certified consultants design tailored roadmaps, execute seamless deployments, and provide comprehensive training and support. Committed to reliability, integrity, and innovation, Critindia helps businesses run simple, grow faster, and thrive in a data-driven world.',
-  },
-};
+import { fetch } from 'next/dist/compiled/@edge-runtime/primitives/fetch';
 
-export default metadata;
+// This is a server component that generates metadata for service pages
+export async function generateMetadata({ params }) {
+  // Await the params object as required by Next.js 15+
+  const { service } = await params;
+  
+  try {
+    // Fetch the service data from the public directory
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/json/data/masterdata.json`);
+    const data = await response.json();
+    
+    // Find the service data
+    const serviceData = data.services?.find(s => 
+      s.id === service || 
+      s.slug === `${service}-services` ||
+      s.slug === service
+    );
+    
+    if (!serviceData) {
+      return getDefaultMetadata(service);
+    }
+    
+    const title = serviceData.fullTitle || serviceData.title || formatServiceName(service);
+    const description = serviceData.description || 'Expert SAP consulting and implementation services';
+    const imageUrl = serviceData.image || 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753937310/CRIT-3D_cpzr1n_1_efzl5o.avif';
+    const url = `https://www.critindia.com/${service}`;
+    
+    return {
+      title: `${title} | CRIT India - SAP Consulting & Implementation Experts`,
+      description: description,
+      metadataBase: new URL('https://www.critindia.com'),
+      alternates: {
+        canonical: url,
+      },
+      openGraph: {
+        title: `${title} | CRIT India`,
+        description: description,
+        url: url,
+        siteName: 'CRIT India',
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${title} | CRIT India`,
+        description: description,
+        images: [imageUrl],
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
+      additionalMetaTags: [
+        {
+          property: 'article:modified_time',
+          content: new Date().toISOString(),
+        },
+      ],
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return getDefaultMetadata(service);
+  }
+}
+
+// Helper function to format service name
+function formatServiceName(str) {
+  if (!str) return 'SAP Services';
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Default metadata when service is not found
+function getDefaultMetadata(service) {
+  const title = formatServiceName(service);
+  return {
+    title: `${title} | CRIT India - SAP Consulting & Implementation Experts`,
+    description: 'Expert SAP consulting and implementation services for your business needs.',
+    openGraph: {
+      title: `${title} | CRIT India`,
+      description: 'Expert SAP consulting and implementation services for your business needs.',
+      images: [
+        {
+          url: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753937310/CRIT-3D_cpzr1n_1_efzl5o.avif',
+          width: 1200,
+          height: 630,
+          alt: 'CRIT India - SAP Consulting',
+        },
+      ],
+    },
+  };
+}

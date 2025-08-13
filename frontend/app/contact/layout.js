@@ -1,7 +1,6 @@
-import { Inter } from 'next/font/google';
-import './contactus.css';
+import { metadata } from './metadata';
 
-const inter = Inter({ subsets: ['latin'] });
+export { metadata };
 
 export default function ContactLayout({ children }) {
   const structuredData = {
@@ -9,9 +8,10 @@ export default function ContactLayout({ children }) {
     "@graph": [
       {
         "@type": "WebPage",
-        "@id": "https://www.critindia.com/",
-        "url": "https://www.critindia.com/",
-        "name": "critindia : Connecting roots of SAP",
+        "@id": "https://www.critindia.com/contact",
+        "url": "https://www.critindia.com/contact",
+        "name": "Contact Us | Connecting Roots - SAP Consulting & Support",
+        "description": "Get in touch with our SAP experts at Connecting Roots. Contact us for SAP implementation, support, and consulting services.",
         "isPartOf": { "@id": "https://www.critindia.com/#website" },
         "about": { "@id": "https://www.critindia.com/#organization" },
         "primaryImageOfPage": { "@id": "https://www.critindia.com/#primaryimage" },
@@ -21,12 +21,12 @@ export default function ContactLayout({ children }) {
   };
 
   return (
-    <div className={inter.className}>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       {children}
-    </div>
+    </>
   );
 }

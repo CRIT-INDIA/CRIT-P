@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default function TawkToWidget({ hideButtons }) {
   const [mounted, setMounted] = useState(false);
@@ -14,6 +15,20 @@ export default function TawkToWidget({ hideButtons }) {
     // Add styles
     const style = document.createElement('style');
     style.textContent = `
+      /* Override Tawk.to icon font */
+      .tawk-icon,
+      .tawk-icon:before,
+      .tawk-icon:after {
+        font-family: 'Font Awesome 5 Free' !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Replace specific icons if needed */
+      .tawk-icon-chat:before {
+        content: '\\f075' !important; /* Font Awesome chat icon */
+      }
+      
       iframe[title*="Tawk"] {
         transition: opacity 0.3s, transform 0.3s !important;
       }
@@ -30,7 +45,6 @@ export default function TawkToWidget({ hideButtons }) {
     // Initialize Tawk.to
     if (window.Tawk_API) {
       window.Tawk_API.onLoad = function() {
-        console.log('Tawk.to loaded successfully');
       };
     }
 

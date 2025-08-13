@@ -496,5 +496,67 @@
         ]
       }
     ]
-  }
+  },
+  "Data Analytics Services": [
+    {
+      "title": "Data-Driven Decision Making",
+      "description": "Empower your organization to make informed decisions based on accurate, real-time data insights and analytics.",
+      "detailedDescription": [
+        "Access to real-time business intelligence and analytics",
+        "Make decisions based on accurate, up-to-date information",
+        "Identify trends and opportunities through advanced analytics",
+        "Measure and track key performance indicators (KPIs)"
+      ]
+    },
+    {
+      "title": "Improved Operational Efficiency",
+      "description": "Streamline business processes and identify optimization opportunities through comprehensive data analysis.",
+      "detailedDescription": [
+        "Identify and eliminate process bottlenecks",
+        "Automate routine data processing tasks",
+        "Optimize resource allocation and utilization",
+        "Reduce operational costs through data-backed insights"
+      ]
+    },
+    {
+      "title": "Enhanced Customer Experience",
+      "description": "Gain deeper customer insights to deliver personalized experiences and improve satisfaction.",
+      "detailedDescription": [
+        "Understand customer behavior and preferences",
+        "Segment customers for targeted marketing",
+        "Predict customer needs and preferences",
+        "Improve customer retention and loyalty"
+      ]
+    },
+    {
+      "title": "Competitive Advantage",
+      "description": "Leverage data analytics to gain insights that provide a competitive edge in your industry.",
+      "detailedDescription": [
+        "Identify market trends and opportunities",
+        "Benchmark performance against industry standards",
+        "Make proactive, data-driven business decisions",
+        "Stay ahead of market changes and disruptions"
+      ]
+    },
+    {
+      "title": "Risk Management",
+      "description": "Identify and mitigate potential risks through predictive analytics and data monitoring.",
+      "detailedDescription": [
+        "Detect anomalies and potential issues early",
+        "Predict and prevent business risks",
+        "Ensure compliance with regulatory requirements",
+        "Protect sensitive business and customer data"
+      ]
+    },
+    {
+      "title": "Scalable Analytics Platform",
+      "description": "Build a flexible analytics infrastructure that grows with your business needs.",
+      "detailedDescription": [
+        "Easily scale analytics capabilities as needed",
+        "Integrate with existing business systems",
+        "Support increasing data volumes and complexity",
+        "Future-proof your analytics infrastructure"
+      ]
+    }
+  ]
 } 

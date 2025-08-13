@@ -1,8 +1,6 @@
-"use client";
 
 import { motion } from "motion/react";
 import { cn } from "../../lib/utils";
-import { motion as framerMotion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import CtaForm from "./CtaForm";
 
@@ -57,27 +55,25 @@ export const ThreeDMarquee = ({ className }) => {
     <div className="relative w-full h-* m-auto min-h-[500px] sm:min-h-[100px] md:min-h-[700px] overflow-hidden max-w-[1800px] mb-10 ">
       {/* Overlayed Content */}
       <div className="flex items-center m-auto justify-start min-h-* max-w-[1800px] z-9 relative px-4">
-        <motion.div
+        <div
           className="w-full max-w-lg md:max-w-xl lg:max-w-2xl px-4 ml-2 sm:ml-8 md:ml-12 lg:ml-24 flex flex-col items-start justify-center"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.h1
+          <h1
             className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-bold text-black/80 leading-tight mb-1 md:mb-6 text-left opacity-100 pt-50"
-            variants={itemVariants}
           >
             Transforming<br />
             Business Through<br />
             <span className="text-red-500">SAP Excellence</span>
-          </motion.h1>
-          <motion.p
+          </h1>
+          <p
             className="text-base md:text-lg text-black mb-6 md:mb-8 max-w-xl text-left"
-            variants={itemVariants}
           >
             Empower your enterprise with Connecting Roots comprehensive SAP implementation and support services. We deliver tailored solutions that drive innovation and growth.
-          </motion.p>
-          <motion.div className="flex flex-wrap gap-3 md:gap-4 justify-start" variants={itemVariants}>
+          </p>
+          <div className="flex flex-wrap gap-3 md:gap-4 justify-start">
             <a
               href="#"
               onClick={e => { e.preventDefault(); setShowCtaForm(true); }}
@@ -96,9 +92,9 @@ export const ThreeDMarquee = ({ className }) => {
             </a>
             
             
-          </motion.div>
+          </div>
           
-        </motion.div>
+        </div>
         
       </div>
       {/* Marquee Background */}

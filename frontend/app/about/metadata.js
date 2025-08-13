@@ -1,12 +1,12 @@
 export const metadata = {
-  title: "About Us - critindia",
-  description: "Learn about critindia - A leading SAP consulting firm with expertise in implementation, support, and digital transformation. Discover our journey, mission, and values.",
+  title: "About Us | Connecting Roots - SAP Consulting & Implementation Experts",
+  description: "Discover Connecting Roots - A premier SAP consulting firm with 10+ years of expertise in SAP implementation, support, and digital transformation. Learn about our journey, mission, and commitment to excellence.",
   alternates: {
     canonical: "https://www.critindia.com/about"
   },
   openGraph: {
-    title: "About Us - critindia | SAP Consulting Experts",
-    description: "Discover the story behind critindia, a leading SAP consulting firm. Learn about our expertise, values, and commitment to delivering exceptional SAP solutions and services.",
+    title: "About Us | Connecting Roots - SAP Consulting & Implementation Experts",
+    description: "Discover Connecting Roots - A trusted SAP consulting partner with a decade of experience in digital transformation. Learn how we help businesses maximize their SAP investments.",
     url: "https://www.critindia.com/about",
     siteName: "critindia",
     images: [
@@ -22,8 +22,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About Us - critindia | SAP Consulting Experts',
-    description: 'Learn about critindia - A leading SAP consulting firm with expertise in implementation, support, and digital transformation. Discover our journey and values.',
+    title: 'About Us | Connecting Roots - SAP Consulting & Implementation Experts',
+    description: 'Discover Connecting Roots - A premier SAP consulting firm with 10+ years of experience in digital transformation and SAP implementation. Learn about our journey and values.',
     images: ['https://res.cloudinary.com/duz9xipfm/image/upload/v1753937310/CRIT-3D_cpzr1n_1_efzl5o.avif'],
   },
   robots: {

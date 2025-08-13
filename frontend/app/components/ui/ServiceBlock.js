@@ -197,7 +197,7 @@ const getIconForFeature = (feature, index = 0, availableIcons = []) => {
   
   // If no contextual match or all contextual icons are used, use available icons
   const safeIndex = Math.max(0, Math.min(index, availableIcons.length - 1)) || 0;
-  const availableIcon = availableIcons[safeIndex] || allUniqueIcons[0] || <div className="w-8 h-8 bg-gray-200 rounded-full" />;
+  const availableIcon = availableIcons[safeIndex] || <div className="w-8 h-8 bg-gray-200 rounded-full" />;
   
   if (React.isValidElement(availableIcon)) {
     const iconKey = availableIcon.type?.displayName || 
@@ -403,33 +403,76 @@ FeatureCard.propTypes = {
   index: PropTypes.number.isRequired
 };
 
+import servicesData from '@/public/json/data/services.json';
+
 export default function ServiceBlock({ serviceName }) {
   const [activeAccordion, setActiveAccordion] = useState(null);
-  const [servicesData, setServicesData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [serviceSection, setServiceSection] = useState(null);
 
   // Reset icon tracker on component mount
   useEffect(() => {
     resetIconTracker();
   }, []);
 
+  // Find and set the service section when serviceName or servicesData changes
   useEffect(() => {
-    // Load services data
-    fetch('/json/data/services.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load services data');
-        }
-        return response.json();
-      })
-      .then(data => setServicesData(data.services))
-      .catch(err => {
-        console.error('Error loading services data:', err);
-        setError('Failed to load services data. Please try again later.');
-      })
-      .finally(() => setLoading(false));
-  }, []);
+    if (!servicesData || !servicesData.services) {
+      setError('Services data not available');
+      setLoading(false);
+      return;
+    }
+    
+    if (!serviceName) {
+      setError('No service specified');
+      setLoading(false);
+      return;
+    }
+    
+    // Find the service section
+    let foundSection = null;
+    
+    // First try exact match
+    foundSection = servicesData.services.sections?.find(
+      section => section?.title?.toLowerCase() === serviceName.toLowerCase()
+    );
+    
+    // If no exact match, try more flexible matching
+    if (!foundSection) {
+      foundSection = servicesData.services.sections?.find(section => {
+        if (!section?.title) return false;
+        
+        const sectionSlug = createServiceSlug(section.title).toLowerCase().replace(/\s+/g, '-');
+        const currentSlug = String(serviceName).toLowerCase().replace(/\s+/g, '-');
+        
+        const normalizedSectionSlug = sectionSlug
+          .replace(/\broll[\s-]?out\b/gi, 'rollout')
+          .replace(/\bimplement(?:ation)?\b/gi, '')
+          .replace(/--+/g, '-')
+          .replace(/^-+|-+$/g, '');
+          
+        const normalizedCurrentSlug = currentSlug
+          .replace(/\broll[\s-]?out\b/gi, 'rollout')
+          .replace(/\bimplement(?:ation)?\b/gi, '')
+          .replace(/--+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        
+        return (
+          sectionSlug === currentSlug || 
+          normalizedSectionSlug === currentSlug ||
+          sectionSlug === normalizedCurrentSlug ||
+          normalizedSectionSlug === normalizedCurrentSlug ||
+          section.title.toLowerCase().includes(serviceName.toLowerCase()) ||
+          serviceName.toLowerCase().includes(section.title.toLowerCase())
+        );
+      });
+    }
+    
+    setServiceSection(foundSection || null);
+    setError(foundSection ? null : `Service "${serviceName}" not found`);
+    setLoading(false);
+  }, [serviceName, servicesData]);
 
   // Create a comprehensive list of unique icons for fallback with keys
   const allUniqueIcons = useMemo(() => [
@@ -530,48 +573,7 @@ export default function ServiceBlock({ serviceName }) {
     });
   }, [allUniqueIcons]);
 
-  // Find the service section that matches the current service name
-  const serviceSection = (() => {
-    // Special case for SAP Rollout Services
-    if (serviceName && serviceName.toLowerCase().includes('rollout')) {
-      const rolloutService = servicesData?.sections?.find(section => 
-        section.title.toLowerCase().includes('rollout') || 
-        section.title.toLowerCase().includes('rollout')
-      );
-      
-      if (rolloutService) {;
-        return rolloutService;
-      }
-    }
-
-    // Normal service matching logic
-    return servicesData?.sections?.find(section => {
-      // Normalize both the section title and the service name for comparison
-      const sectionSlug = createServiceSlug(section.title).toLowerCase().replace(/\s+/g, '-');
-      const currentSlug = String(serviceName || '').toLowerCase().replace(/\s+/g, '-');
-      
-      // Also check for common variations (like 'roll-out' vs 'rollout')
-      const normalizedSectionSlug = sectionSlug
-        .replace(/\broll[\s-]?out\b/gi, 'rollout')
-        .replace(/\bimplement(?:ation)?\b/gi, '')
-        .replace(/--+/g, '-')
-        .replace(/^-+|-+$/g, '');
-        
-      const normalizedCurrentSlug = currentSlug
-        .replace(/\broll[\s-]?out\b/gi, 'rollout')
-        .replace(/\bimplement(?:ation)?\b/gi, '')
-        .replace(/--+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      
-      const isMatch = 
-        sectionSlug === currentSlug || 
-        normalizedSectionSlug === currentSlug ||
-        sectionSlug === normalizedCurrentSlug ||
-        normalizedSectionSlug === normalizedCurrentSlug;
-      
-      return isMatch;
-    });
-  })();
+  // Note: serviceSection is managed via state and populated in the effect above
 
   const overviewText = serviceSection?.overview || 'Overview content not available.';
 
@@ -597,14 +599,14 @@ export default function ServiceBlock({ serviceName }) {
   const relatedServices = useMemo(() => {
     try {
       if (!Array.isArray(serviceSection?.relatedServiceIds) || 
-          !Array.isArray(servicesData?.relatedServices)) {
+          !Array.isArray(servicesData.services?.relatedServices)) {
         return [];
       }
       
       return serviceSection.relatedServiceIds
         .filter(id => id && typeof id === 'string')
         .map(id => {
-          const service = servicesData.relatedServices.find(svc => svc && svc.id === id);
+          const service = servicesData.services.relatedServices.find(svc => svc && svc.id === id);
           return service ? {
             id: service.id,
             title: service.title || 'Service',
@@ -753,18 +755,54 @@ export default function ServiceBlock({ serviceName }) {
   
   // Set the headline and subheading based on the service
   const headline = formattedServiceName || 'SAP S/4 HANA';
-  const subheading = serviceSection?.seo_description || servicesData?.subheading || 'Transform your business with intelligent ERP solutions powered by in-memory computing, real-time analytics, and modern user experiences.';
+  const subheading = serviceSection?.seo_description || servicesData.services?.subheading || 'Transform your business with intelligent ERP solutions powered by in-memory computing, real-time analytics, and modern user experiences.';
 
   // Validate keyFeatures to ensure it's always an array
   const safeKeyFeatures = Array.isArray(keyFeatures) ? keyFeatures : [];
 
   // Ensure we have valid data before rendering
-  if (!serviceSection || typeof serviceSection !== 'object') {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading service information...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-700">Loading service information...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center p-6 max-w-md mx-auto bg-red-50 rounded-lg">
+          <div className="text-red-600 text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Service Unavailable</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <a 
+            href="/services" 
+            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Back to Services
+          </a>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!serviceSection || typeof serviceSection !== 'object') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center p-6 max-w-md mx-auto bg-yellow-50 rounded-lg">
+          <div className="text-yellow-600 text-4xl mb-4">🔍</div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Service Not Found</h2>
+          <p className="text-gray-600 mb-6">The requested service "{serviceName}" could not be found.</p>
+          <a 
+            href="/services" 
+            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            View All Services
+          </a>
         </div>
       </div>
     );
@@ -772,10 +810,12 @@ export default function ServiceBlock({ serviceName }) {
 
   return (
     <div className="min-h-screen" key={`service-${serviceName || 'default'}`}>
-      
+      {/* Preload the hero image in the document head */}
       <link 
+        rel="preload" 
         as="image" 
         href={serviceSection?.image} 
+        fetchPriority="high"
       />
       
       {/* Hero Section */}
@@ -883,30 +923,30 @@ export default function ServiceBlock({ serviceName }) {
                   {/* Pair 1 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf_qxb9gf.avif" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753165462/Project_70-02_uw5nzc.jpg" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.2s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8_rwngic.avif" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166207/101_ZS0yMw_jp1azj.jpg" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                   
                   {/* Pair 2 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.4s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox_moo0ly.avif" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166794/MyApril10_k7z7wb.jpg" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.6s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/101_ZS0yMw_jp1azj_a3b0xt.avif" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167637/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox.jpg" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                   
                   {/* Pair 3 */}
                   <div className="flex gap-4 items-center">
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.8s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/MyApril10_k7z7wb_n3f3yo.avif" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167770/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf.jpg" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
                     </div>
                     <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '1s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754892125/i_nqzu4g.avif" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
+                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167937/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8.jpg" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
                     </div>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ export default function AiInsightsSection() {
     <section className="w-full py-12 md:py-24 lg:py-32 flex flex-col items-center">
       <div className="container px-4 md:px-6 flex flex-col items-center">
         {/* Hide heading on mobile */}
-        <h2 className="hidden md:block text-3xl font-sans-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-gray-900 mb-12">
+        <h2 className="hidden md:block text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-gray-900 mb-12">
           Our Expertise
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start justify-items-center">
@@ -47,7 +47,7 @@ export default function AiInsightsSection() {
             <Card className="rounded-2xl shadow-3xl border-0 bg-gradient-to-br from-red-500 to-red-600 p-6 text-white w-full max-w-sm h-64 flex items-center justify-center">
               <CardContent className="p-5 text-center">
                 <div className="text-5xl font-bold mb-3">75%</div>
-                <div className="text-sm leading-relaxed">
+                <div className="text-sm font-semibold leading-relaxed">
                   of the services are available with us.
                 </div>
               </CardContent>
@@ -93,7 +93,7 @@ export default function AiInsightsSection() {
                 alt="Team Collaboration"
                 className="w-full max-w-sm h-64 object-cover rounded-lg shadow-3xl border border-gray-200"
               />
-              <div className="w-full ml-10 mt-5 max-w-sm h-42 bg-gradient-to-t from-[#fff5f5] to-red-200 rounded-t-3xl"></div>
+              <div className="w-full mt-10 max-w-sm h-42 bg-gradient-to-t from-[#fff5f5] to-red-200 rounded-t-3xl"></div>
             </div>
           </div>
         </div>

@@ -9,6 +9,11 @@ const ModernFooter = () => {
   
   useEffect(() => {
     setIsMounted(true);
+    // Add animation classes after mount to prevent hydration mismatch
+    const elements = document.querySelectorAll('.animate-on-mount');
+    elements.forEach(el => {
+      el.classList.add('opacity-100', 'translate-y-0');
+    });
   }, []);
   
   const socialLinks = [
@@ -29,7 +34,8 @@ const ModernFooter = () => {
         { name: "SAP Integration", href: "/sap-integration-services" },
         { name: "SAP Migration", href: "/sap-migration-services" },
         { name: "SAP Automation", href: "/sap-automation-services" },
-        { name: "SAP Testing", href: "/sap-testing-services" }
+        { name: "SAP Testing", href: "/sap-testing-services" },
+        { name: "Data Analytics", href: "/data-analytics" }
       ]
     },
     {
@@ -66,6 +72,12 @@ const ModernFooter = () => {
 
   return (
     <footer className="relative bg-black min-h-* overflow-hidden pt-10">
+      {/* Loading state */}
+      {!isMounted && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="animate-pulse text-white">Loading...</div>
+        </div>
+      )}
       {/* Floating geometric shapes */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Main central device mockup */}
@@ -76,14 +88,15 @@ const ModernFooter = () => {
         
         {/* Floating circles */}
        
-        <div className="absolute top-32 right-24 w-6 h-6 bg-shape-tertiary rounded-full animate-float"></div>
-        <div className="absolute top-20 right-1/4 w-3 h-3 bg-orange-500/50 rounded-full animate-pulse-slow"></div>
-        <div className="absolute bottom-1/3 left-20 w-5 h-5 bg-shape-secondary rounded-full animate-float"></div>
+        {/* Animated elements - initially hidden, then animated in with JS */}
+        <div className={`absolute top-32 right-24 w-6 h-6 bg-shape-tertiary rounded-full transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
+        <div className={`absolute top-20 right-1/4 w-3 h-3 bg-orange-500/50 rounded-full transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
+        <div className={`absolute bottom-1/3 left-20 w-5 h-5 bg-shape-secondary rounded-full transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
         
         {/* Geometric shapes */}
-        <div className="absolute top-24 left-1/3 w-6 h-6 border-2 border-orange-500/50 rotate-45 animate-float-"></div>
-        <div className="absolute bottom-1/2 right-16 w-4 h-4 border border-shape-tertiary animate-float"></div>
-        <div className="absolute top-1/3 right-1/3 w-8 h-8 border-2 border-orange-500/50 rounded-lg animate-float-delayed"></div>
+        <div className={`absolute top-24 left-1/3 w-6 h-6 border-2 border-orange-500/50 rotate-45 transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
+        <div className={`absolute bottom-1/2 right-16 w-4 h-4 border border-shape-tertiary transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
+        <div className={`absolute top-1/3 right-1/3 w-8 h-8 border-2 border-orange-500/50 rounded-lg transition-all duration-1000 ${isMounted ? 'opacity-100' : 'opacity-0'}`}></div>
       </div>
 
       
@@ -101,7 +114,7 @@ const ModernFooter = () => {
                   className="w-16 h-16 object-contain flex-shrink-0"
                 />
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-bold text-footer-heading">Connecting Roots</h2>
+                  <h2 className="text-2xl font-bold text-white">Connecting Roots</h2>
                   <p className="text-base text-gray-400">SAP Excellence Partner</p>
                 </div>
               </div>

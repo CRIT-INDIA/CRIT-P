@@ -263,6 +263,138 @@
       ],
       "clientProfile": "Small to Enterprise (25+ employees)",
       "implementationTime": "3-5 months depending on complexity"
+    },
+    {
+      "id": "sap-b1",
+      "name": "SAP Business One",
+      "subtitle": "Complete Business Management for SMEs",
+      "category": "Small Business ERP",
+      "icon": "Building",
+      "executiveSummary": "SAP Business One (B1) delivers a comprehensive, integrated business management solution specifically designed for small and medium-sized enterprises. Unlike complex enterprise systems, B1 offers a streamlined yet powerful platform that combines financial management, sales, customer relationships, inventory, and operations in one accessible package. With industry-specific functionality and rapid implementation capabilities, it enables growing businesses to gain immediate control and visibility across all aspects of their operations. The solution scales alongside your business, providing the foundation for sustainable growth while eliminating the inefficiencies of disconnected systems and manual processes.",
+      "keyCapabilities": [
+        "Integrated financial management with real-time reporting",
+        "Sales and customer relationship management in a unified system",
+        "Inventory and distribution management with automated replenishment",
+        "Production planning and control for manufacturing operations",
+        "Business intelligence with interactive dashboards and analytics",
+        "Mobile access for on-the-go business management"
+      ],
+      "businessOutcomes": [
+        "Reduce operational costs by 20-35% through process automation",
+        "Accelerate financial close processes by up to 70%",
+        "Improve inventory accuracy to 99% with real-time tracking",
+        "Increase sales performance by 25% with integrated CRM",
+        "Enable data-driven decisions with comprehensive business insights"
+      ],
+      "technicalSpecs": {
+        "deployment": "Cloud | On-Premise | Hybrid",
+        "integration": "SAP and third-party applications via APIs",
+        "security": "Role-based access control, data encryption",
+        "availability": "99.9% SLA with 24/7 support options"
+      },
+      "investmentMetrics": {
+        "roi": "250% over 3 years",
+        "paybackPeriod": "10 months",
+        "costReduction": "30-40% in administrative overhead",
+        "productivity": "45% improvement in operational efficiency"
+      },
+      "industryFocus": [
+        "Wholesale Distribution",
+        "Professional Services",
+        "Manufacturing",
+        "Retail",
+        "Food & Beverage"
+      ],
+      "clientProfile": "Small to Mid-market (10-250 employees)",
+      "implementationTime": "2-4 months depending on complexity"
+    },
+    {
+      "id": "data-science",
+      "name": "Data Science Solutions",
+      "subtitle": "Advanced Analytics and Predictive Modeling",
+      "category": "Data Intelligence",
+      "icon": "LineChart",
+      "executiveSummary": "Our Data Science Solutions transform raw data into strategic business assets through advanced analytics, machine learning, and AI-powered insights. By combining statistical analysis with domain expertise, we help organizations uncover hidden patterns, predict future trends, and optimize decision-making processes. Our comprehensive approach encompasses everything from data preparation and exploratory analysis to model development and deployment, ensuring you extract maximum value from your data assets. Whether you're looking to enhance customer experiences, optimize operations, or develop new data-driven products, our solutions provide the intelligence needed to gain and maintain competitive advantage in today's data-rich business environment.",
+      "keyCapabilities": [
+        "Predictive analytics with machine learning model development",
+        "Natural language processing for text and sentiment analysis",
+        "Computer vision and image recognition capabilities",
+        "Time series forecasting for demand and trend prediction",
+        "Anomaly detection for fraud prevention and quality control",
+        "Recommendation engines for personalization at scale"
+      ],
+      "businessOutcomes": [
+        "Increase revenue by 15-30% through predictive customer insights",
+        "Reduce operational costs by 25% with process optimization",
+        "Improve forecast accuracy by 40% with advanced modeling",
+        "Decrease customer churn by 35% with proactive intervention",
+        "Accelerate innovation cycles with data-driven product development"
+      ],
+      "technicalSpecs": {
+        "deployment": "Cloud | On-Premise | Hybrid environments",
+        "integration": "Data lakes, warehouses, and business applications",
+        "security": "Enterprise-grade with data anonymization capabilities",
+        "availability": "Flexible deployment with scalable infrastructure"
+      },
+      "investmentMetrics": {
+        "roi": "320% over 3 years",
+        "paybackPeriod": "9 months",
+        "costReduction": "20-35% through process optimization",
+        "productivity": "50% faster time-to-insight for business users"
+      },
+      "industryFocus": [
+        "Financial Services",
+        "Healthcare",
+        "Retail",
+        "Manufacturing",
+        "Telecommunications"
+      ],
+      "clientProfile": "Mid-market to Enterprise (100+ employees)",
+      "implementationTime": "3-6 months depending on use cases"
+    },
+    {
+      "id": "data-analytics",
+      "name": "Data Analytics Platform",
+      "subtitle": "Business Intelligence and Visualization",
+      "category": "Analytics & Reporting",
+      "icon": "PieChart",
+      "executiveSummary": "Our Data Analytics Platform democratizes data access across your organization, enabling users at all levels to explore, visualize, and derive insights without advanced technical skills. Through intuitive dashboards, interactive reports, and self-service analytics capabilities, the platform transforms complex data into clear, actionable intelligence. It seamlessly connects to multiple data sources, providing a unified view of your business while maintaining robust governance and security. By putting the power of analytics directly in the hands of business users, our platform accelerates decision-making, uncovers new opportunities, and drives a data-driven culture throughout your organization.",
+      "keyCapabilities": [
+        "Self-service analytics with intuitive drag-and-drop interfaces",
+        "Interactive dashboards with drill-down capabilities",
+        "Automated reporting with scheduled distribution",
+        "Data visualization with advanced charting options",
+        "Mobile analytics for insights on any device",
+        "Embedded analytics for integration with business applications"
+      ],
+      "businessOutcomes": [
+        "Reduce report creation time by 80% with self-service capabilities",
+        "Improve decision-making speed by 60% with real-time insights",
+        "Increase data literacy across the organization by 75%",
+        "Optimize resource allocation with performance analytics",
+        "Enhance customer satisfaction through data-driven improvements"
+      ],
+      "technicalSpecs": {
+        "deployment": "Cloud | On-Premise | Hybrid",
+        "integration": "100+ data connectors for diverse sources",
+        "security": "Row-level security, SSO, and encryption",
+        "availability": "99.9% uptime with enterprise support"
+      },
+      "investmentMetrics": {
+        "roi": "275% over 3 years",
+        "paybackPeriod": "11 months",
+        "costReduction": "40-60% in reporting and analysis costs",
+        "productivity": "70% reduction in time spent gathering data"
+      },
+      "industryFocus": [
+        "Retail",
+        "Financial Services",
+        "Healthcare",
+        "Manufacturing",
+        "Professional Services"
+      ],
+      "clientProfile": "Small to Enterprise (25+ employees)",
+      "implementationTime": "1-3 months depending on complexity"
     }
   ]
   

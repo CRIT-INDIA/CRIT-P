@@ -1,3 +1,9 @@
+// Import metadata from the metadata.js file
+import { metadata as productsMetadata } from './metadata';
+
+// Export metadata for this route
+export const metadata = productsMetadata;
+
 export default function ProductsLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
@@ -6,7 +12,7 @@ export default function ProductsLayout({ children }) {
         "@type": "WebPage",
         "@id": "https://www.critindia.com/products",
         "url": "https://www.critindia.com/products",
-        "name": "critindia : Connecting roots of SAP",
+        "name": "Products - critindia",
         "isPartOf": { "@id": "https://www.critindia.com/#website" },
         "about": { "@id": "https://www.critindia.com/#organization" },
         "primaryImageOfPage": { "@id": "https://www.critindia.com/#primaryimage" },
