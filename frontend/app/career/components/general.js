@@ -675,6 +675,7 @@ const CareerPage = () => {
                     <input
                       id="fullName"
                       type="text"
+                      autoComplete="name"
                       className={`w-full bg-gray-200 border ${
                         errors.fullName ? 'border-red-500' : 'border-gray-600'
                       } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
@@ -690,12 +691,13 @@ const CareerPage = () => {
                   </div>
                   
                   <div>
-                    <label htmlFor="position" className="block text-black font-medium mb-2">
+                    <label htmlFor="desiredPosition" className="block text-black font-medium mb-2">
                       Desired Position <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="desiredPosition"
                       type="text"
+                      autoComplete="organization-title"
                       className={`w-full bg-gray-200 border ${
                         errors.desiredPosition ? 'border-red-500' : 'border-gray-600'
                       } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
@@ -718,6 +720,7 @@ const CareerPage = () => {
                     <input
                       id="experience"
                       type="text"
+                      autoComplete="off"
                       className={`w-full bg-gray-200 border ${
                         errors.experience ? 'border-red-500' : 'border-gray-600'
                       } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
@@ -738,6 +741,7 @@ const CareerPage = () => {
                     <input
                       id="currentCTC"
                       type="text"
+                      autoComplete="off"
                       className={`w-full bg-gray-200 border ${
                         errors.currentCTC ? 'border-red-500' : 'border-gray-600'
                       } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
@@ -787,6 +791,7 @@ const CareerPage = () => {
                       <input
                         type="file"
                         accept=".pdf,.doc,.docx"
+                        autoComplete="off"
                         ref={fileInputRef}
                         style={{ display: 'none' }}
                         onChange={handleFileChange}

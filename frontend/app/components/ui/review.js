@@ -495,6 +495,7 @@ const CustomerTestimonials = () => {
                       type="text"
                       id="name"
                       name="name"
+                      autoComplete="name"
                       required
                       value={formData.name}
                       onChange={handleInputChange}
@@ -510,6 +511,7 @@ const CustomerTestimonials = () => {
                       type="email"
                       id="email"
                       name="email"
+                      autoComplete="email"
                       required
                       value={formData.email}
                       onChange={handleInputChange}
@@ -528,6 +530,7 @@ const CustomerTestimonials = () => {
                       type="text"
                       id="position"
                       name="position"
+                      autoComplete="organization-title"
                       required
                       value={formData.position}
                       onChange={handleInputChange}
@@ -543,6 +546,7 @@ const CustomerTestimonials = () => {
                       type="text"
                       id="company"
                       name="company"
+                      autoComplete="organization"
                       required
                       value={formData.company}
                       onChange={handleInputChange}

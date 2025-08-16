@@ -645,6 +645,7 @@ export default function ContactForm() {
                   <input
                     type="text"
                     name="name"
+                    autoComplete="name"
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Enter your Name"
@@ -660,6 +661,7 @@ export default function ContactForm() {
                   <input
                     type="email"
                     name="email"
+                    autoComplete="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter a valid email address"
@@ -675,6 +677,7 @@ export default function ContactForm() {
                   <input
                     type="text"
                     name="companyName"
+                    autoComplete="organization"
                     value={formData.companyName}
                     onChange={handleChange}
                     placeholder="Enter your Company Name"
@@ -708,6 +711,7 @@ export default function ContactForm() {
                           <input
                             type="text"
                             value={searchTerm}
+                            autoComplete="off"
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Search country..."
                             className="w-full p-2 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -739,6 +743,7 @@ export default function ContactForm() {
                     <input
                       type="tel"
                       name="phoneNumber"
+                      autoComplete="tel"
                       value={formData.phoneNumber}
                       onChange={handlePhoneChange}
                       placeholder={phoneValidationRules[formData.countryCode]?.placeholder || "Enter your phone number"}

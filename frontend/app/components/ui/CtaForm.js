@@ -508,6 +508,7 @@ export default function CritIndiaCtaForm({ onClose }) {
                       <input
                         type="text"
                         name="name"
+                        autoComplete="name"
                         placeholder="Full Name *"
                         value={formData.name}
                         onChange={handleChange}
@@ -519,6 +520,7 @@ export default function CritIndiaCtaForm({ onClose }) {
                       <input
                         type="email"
                         name="email"
+                        autoComplete="email"
                         placeholder="Business Email *"
                         value={formData.email}
                         onChange={handleChange}
@@ -532,6 +534,7 @@ export default function CritIndiaCtaForm({ onClose }) {
                     <input
                       type="text"
                       name="company"
+                      autoComplete="organization"
                       placeholder="Company Name"
                       value={formData.company}
                       onChange={handleChange}

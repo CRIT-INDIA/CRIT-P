@@ -13,12 +13,12 @@ const customStyles = `
     50% { transform: scale(1.05); }
   }
   
-  @keyframes float {
+  @keyframes erp-float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
   }
   
-  @keyframes glow {
+  @keyframes erp-glow {
     0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
     50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
   }
@@ -31,12 +31,12 @@ const customStyles = `
     animation: pulse 3s ease-in-out infinite;
   }
   
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  .erp-animate-float {
+    animation: erp-float 6s ease-in-out infinite;
   }
   
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite;
+  .erp-animate-glow {
+    animation: erp-glow 2s ease-in-out infinite;
   }
   
   .glow-effect {
