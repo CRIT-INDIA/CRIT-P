@@ -5,8 +5,11 @@ import React, { useState, useEffect, useRef } from 'react';
 const TestimonialCarousel = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const scrollRef = useRef(null);
+  const mobileScrollRef = useRef(null);
   const animationRef = useRef(null);
+  const mobileAnimationRef = useRef(null);
 
   // SAP-focused testimonial data
   const testimonials = [
@@ -103,18 +106,29 @@ const TestimonialCarousel = () => {
   // Triple testimonials for smoother infinite scroll
   const tripleTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Desktop auto-scroll
   useEffect(() => {
     const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
+    if (!scrollContainer || isMobile) return;
 
     let scrollPosition = 0;
-    const scrollSpeed = 0.8; // Increased scroll speed for faster movement
+    const scrollSpeed = 0.8;
     
     const animate = () => {
       if (!isPaused && scrollContainer) {
         scrollPosition += scrollSpeed;
         
-        // Reset when scrolled through one complete set
         const maxScroll = scrollContainer.scrollWidth / 3;
         if (scrollPosition >= maxScroll) {
           scrollPosition = 0;
@@ -132,7 +146,55 @@ const TestimonialCarousel = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPaused]);
+  }, [isPaused, isMobile]);
+
+  // Mobile auto-scroll
+  useEffect(() => {
+    const scrollContainer = mobileScrollRef.current;
+    if (!scrollContainer || !isMobile) return;
+
+    let scrollPosition = 0;
+    const scrollSpeed = 0.5;
+    
+    const animate = () => {
+      if (!isPaused && scrollContainer) {
+        scrollPosition += scrollSpeed;
+        
+        const cardWidth = window.innerWidth * 0.85 + 16;
+        const maxScroll = cardWidth * testimonials.length;
+        
+        if (scrollPosition >= maxScroll) {
+          scrollPosition = 0;
+        }
+        
+        scrollContainer.scrollLeft = scrollPosition;
+      }
+      mobileAnimationRef.current = requestAnimationFrame(animate);
+    };
+
+    mobileAnimationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (mobileAnimationRef.current) {
+        cancelAnimationFrame(mobileAnimationRef.current);
+      }
+    };
+  }, [isPaused, isMobile, testimonials.length]);
+
+  // Fixed interaction handlers - this was the main issue
+  const handleCardEnter = (index) => {
+    setHoveredIndex(index);
+    setIsPaused(true);
+  };
+
+  const handleCardLeave = () => {
+    setHoveredIndex(null);
+  };
+
+  const handleContainerLeave = () => {
+    setIsPaused(false);
+    setHoveredIndex(null);
+  };
 
   return (
     <div className="w-full bg-white py-20 overflow-hidden">
@@ -142,9 +204,9 @@ const TestimonialCarousel = () => {
           <h2 className="text-4xl md:text-4xl font-extrabold text-gray-900 mb-4">
             Client Success Stories
             <svg className="mx-auto my-0" style={{marginTop: '-4px'}} width="160" height="18" viewBox="0 0 220 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 18 Q 110 8, 215 14" stroke="#FFD700" strokeWidth="4" strokeLinecap="round" fill="none"/>
-                                <path d="M15 21 Q 120 15, 200 18" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" fill="none"/>
-                            </svg>
+              <path d="M5 18 Q 110 8, 215 14" stroke="#FFD700" strokeWidth="4" strokeLinecap="round" fill="none"/>
+              <path d="M15 21 Q 120 15, 200 18" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" fill="none"/>
+            </svg>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Discover how leading enterprises transformed their operations with our SAP expertise
@@ -153,58 +215,140 @@ const TestimonialCarousel = () => {
 
         {/* Desktop Carousel */}
         <div className="hidden md:block relative">
-          
           <div
             ref={scrollRef}
             className="flex gap-8 overflow-x-hidden py-8"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => {
-              setIsPaused(false);
-              setHoveredIndex(null);
-            }}
+            onMouseLeave={handleContainerLeave}
           >
-            {tripleTestimonials.map((testimonial, index) => (
-              <div
-                key={`${testimonial.id}-${index}`}
-                className="flex-shrink-0 w-[380px]"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
-                <div className="pt-2">
-                  <div
+            {tripleTestimonials.map((testimonial, index) => {
+              const isHovered = hoveredIndex === index;
+              
+              return (
+                <div
+                  key={`${testimonial.id}-${index}`}
+                  className="flex-shrink-0 w-[380px]"
+                  onMouseEnter={() => handleCardEnter(index)}
+                  onMouseLeave={handleCardLeave}
+                >
+                  <div className="pt-2">
+                    <div
+                      className={`relative bg-white rounded-2xl p-6 h-full transition-all duration-300 ease-in-out border ${
+                        isHovered
+                          ? 'border-red-500 shadow-md transform -translate-y-1 scale-[1.01] ring-1 ring-red-100'
+                          : 'border-gray-200 shadow-sm hover:shadow-md'
+                      }`}
+                    >
+                      {/* SAP Module Badge */}
+                      <div className={`absolute -top-3 left-6 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-[11px] font-bold shadow-sm transition-all duration-200 ${
+                        isHovered ? 'scale-105' : ''
+                      }`}>
+                        SAP {testimonial.module}
+                      </div>
+
+                      {/* Quote Icon */}
+                      <div className="absolute top-8 right-8 text-red-100">
+                        <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                      </div>
+
+                      {/* Content */}
+                      <div className="relative z-10 mt-4">
+                        <p className="text-gray-700 font-medium mb-4 text-md leading-relaxed">
+                          "{testimonial.fullTestimonial}"
+                        </p>
+
+                        {/* Metric Display */}
+                        <div className={`mb-1 transition-all duration-500 ${
+                          isHovered ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
+                        }`}>
+                          <div className="flex items-baseline gap-2 mb-1">
+                            <span className="text-4xl font-bold text-red-500">{testimonial.metric}</span>
+                            <span className="text-gray-600 font-medium">{testimonial.metricLabel}</span>
+                          </div>
+                        </div>
+
+                        {/* Author Info */}
+                        <div className="border-t border-gray-100 pt-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h4 className="font-bold text-gray-900 text-lg">{testimonial.name}</h4>
+                              <p className="text-gray-600">{testimonial.jobTitle}</p>
+                              <p className="text-red-600 font-medium">{testimonial.company}</p>
+                            </div>
+                            <div className="flex flex-col items-end">
+                              <div className="flex text-red-500 mb-2">
+                                {[...Array(5)].map((_, i) => (
+                                  <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                  </svg>
+                                ))}
+                              </div>
+                              <span className="text-xs text-gray-500 font-medium">Verified Client</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mobile View */}
+        <div className="md:hidden relative">
+          <div 
+            ref={mobileScrollRef}
+            className="flex overflow-x-hidden py-6 -mx-4 px-4 gap-4 no-scrollbar"
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
+          >
+            {[...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => {
+              const isHovered = hoveredIndex === index;
+              
+              return (
+                <div 
+                  key={`mobile-${testimonial.id}-${index}`}
+                  className="flex-shrink-0 w-[85vw] px-1"
+                  onTouchStart={() => handleCardEnter(index)}
+                  onTouchEnd={handleCardLeave}
+                >
+                  <div 
                     className={`relative bg-white rounded-2xl p-6 h-full transition-all duration-300 ease-in-out border ${
-                      hoveredIndex === index
+                      isHovered
                         ? 'border-red-500 shadow-md transform -translate-y-1 scale-[1.01] ring-1 ring-red-100'
                         : 'border-gray-200 shadow-sm hover:shadow-md'
                     }`}
                   >
                     {/* SAP Module Badge */}
                     <div className={`absolute -top-3 left-6 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-[11px] font-bold shadow-sm transition-all duration-200 ${
-                      hoveredIndex === index ? 'scale-105' : ''
+                      isHovered ? 'scale-105' : ''
                     }`}>
                       SAP {testimonial.module}
                     </div>
 
                     {/* Quote Icon */}
-                    <div className="absolute top-8 right-8 text-red-100">
-                      <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                    <div className="absolute top-4 right-4 text-red-100">
+                      <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                       </svg>
                     </div>
 
                     {/* Content */}
                     <div className="relative z-10 mt-4">
-                      <p className="text-gray-700 font-medium mb-4 text-md leading-relaxed">
-                      "{testimonial.fullTestimonial}"
-                    </p>
+                      <p className="text-gray-700 font-medium mb-4 text-sm leading-relaxed">
+                        "{testimonial.fullTestimonial}"
+                      </p>
 
                       {/* Metric Display */}
                       <div className={`mb-1 transition-all duration-500 ${
-                        hoveredIndex === index ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
+                        isHovered ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
                       }`}>
                         <div className="flex items-baseline gap-2 mb-1">
-                          <span className="text-4xl font-bold text-red-500">{testimonial.metric}</span>
-                          <span className="text-gray-600 font-medium">{testimonial.metricLabel}</span>
+                          <span className="text-2xl font-bold text-red-500">{testimonial.metric}</span>
+                          <span className="text-gray-600 text-xs">{testimonial.metricLabel}</span>
                         </div>
                       </div>
 
@@ -212,107 +356,36 @@ const TestimonialCarousel = () => {
                       <div className="border-t border-gray-100 pt-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h4 className="font-bold text-gray-900 text-lg">{testimonial.name}</h4>
-                            <p className="text-gray-600">{testimonial.jobTitle}</p>
-                            <p className="text-red-600 font-medium">{testimonial.company}</p>
+                            <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                            <p className="text-xs text-gray-600">{testimonial.jobTitle}</p>
+                            <p className="text-xs text-red-600 font-medium">{testimonial.company}</p>
                           </div>
                           <div className="flex flex-col items-end">
-                            <div className="flex text-red-500 mb-2">
+                            <div className="flex text-red-400">
                               {[...Array(5)].map((_, i) => (
-                                <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                   <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                                 </svg>
                               ))}
                             </div>
-                            <span className="text-xs text-gray-500 font-medium">Verified Client</span>
+                            <span className="text-xs text-gray-500">Verified</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile View - Matches Desktop Layout */}
-        <div className="md:hidden relative">
-          <div className="flex overflow-x-auto snap-x snap-mandatory py-6 -mx-4 px-4 gap-4 no-scrollbar">
-            {testimonials.map((testimonial, index) => (
-              <div 
-                key={testimonial.id}
-                className="flex-shrink-0 w-[85vw] snap-center px-1"
-              >
-                <div 
-                  className={`relative bg-white rounded-2xl p-6 h-full transition-all duration-300 ease-in-out border ${
-                    hoveredIndex === index
-                      ? 'border-red-500 shadow-md transform -translate-y-1 scale-[1.01] ring-1 ring-red-100'
-                      : 'border-gray-200 shadow-sm hover:shadow-md'
-                  }`}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  {/* SAP Module Badge */}
-                  <div className={`absolute -top-3 left-6 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-[11px] font-bold shadow-sm transition-all duration-200 ${
-                    hoveredIndex === index ? 'scale-105' : ''
-                  }`}>
-                    SAP {testimonial.module}
-                  </div>
-
-                  {/* Quote Icon */}
-                  <div className="absolute top-4 right-4 text-red-100">
-                    <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                    </svg>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 mt-4">
-                    <p className="text-gray-700 font-medium mb-4 text-sm leading-relaxed">
-                      "{testimonial.fullTestimonial}"
-                    </p>
-
-                    {/* Metric Display */}
-                    <div className={`mb-1 transition-all duration-500 ${
-                      hoveredIndex === index ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform -translate-y-4'
-                    }`}>
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-2xl font-bold text-red-500">{testimonial.metric}</span>
-                        <span className="text-gray-600 text-xs">{testimonial.metricLabel}</span>
-                      </div>
-                    </div>
-
-                    {/* Author Info */}
-                    <div className="border-t border-gray-100 pt-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                          <p className="text-xs text-gray-600">{testimonial.jobTitle}</p>
-                          <p className="text-xs text-red-600 font-medium">{testimonial.company}</p>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <div className="flex text-red-400">
-                            {[...Array(5)].map((_, i) => (
-                              <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                              </svg>
-                            ))}
-                          </div>
-                          <span className="text-xs text-gray-500">Verified</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           
-          {/* Custom scrollbar styles */}
           <style jsx>{`
             .no-scrollbar::-webkit-scrollbar {
               display: none;
+            }
+            .no-scrollbar {
+              -ms-overflow-style: none;
+              scrollbar-width: none;
             }
             @media (prefers-reduced-motion: reduce) {
               [style*="scroll-behavior:"] {
@@ -321,8 +394,6 @@ const TestimonialCarousel = () => {
             }
           `}</style>
         </div>
-
-        
       </div>
     </div>
   );

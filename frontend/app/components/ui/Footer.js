@@ -146,25 +146,25 @@ const ModernFooter = () => {
             </div>
           </div>
 
-          {/* Footer Links Grid - Right Side */}
-          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Footer Links Grid - Right Side - FIXED: Changed to grid-cols-3 for all screen sizes */}
+          <div className="lg:col-span-3 grid grid-cols-3 gap-2 sm:gap-4 md:gap-8">
             {footerSections.map((section) => (
-              <div key={section.title} className="space-y-6">
+              <div key={section.title} className="space-y-3 sm:space-y-6">
                 {section.isContact ? (
                   <>
               
                   </>
                 ) : (
                   <>
-                    <h3 className="text-[1.15rem] font-semibold text-red-500 tracking-wider">
+                    <h3 className="text-sm sm:text-base md:text-[1.15rem] font-semibold text-red-500 tracking-wider">
                       {section.title}
                     </h3>
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {section.links.map((link) => (
                         <li key={link.name}>
                           <a
                             href={link.href}
-                            className="text-gray-400 hover:text-orange-500 transition-colors duration-300 text-base"
+                            className="text-gray-400 hover:text-orange-500 transition-colors duration-300 text-xs sm:text-sm md:text-base"
                           >
                             {link.name}
                           </a>
@@ -184,8 +184,10 @@ const ModernFooter = () => {
         </div>
 
         {/* Horizontal divider */}
-        <div className="border-t border-gray-700 my-8"></div>
-
+        <div className="relative border-t border-gray-700 my-8">
+  <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-gray-700 rounded-full"></div>
+</div>
+           
         {/* Get in Touch title */}
         <h3 className="text-base font-semibold text-red-500 tracking-wider  mb-4">Get in Touch</h3>
 

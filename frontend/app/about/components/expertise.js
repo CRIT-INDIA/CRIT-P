@@ -10,10 +10,10 @@ export default function AiInsightsSection() {
         <h2 className="hidden md:block text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center text-gray-900 mb-12">
           Our Expertise
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start justify-items-center">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start justify-items-center">
           {/* Left Column */}
           <div className="flex flex-col gap-8">
-            <Card className="rounded-full shadow-3xl border border-red-500 bg-white p-2">
+            <Card className="rounded-full shadow-3xl border border-gray-200 bg-white">
               <CardHeader className="p-6 pb-4">
                 <CardTitle className="text-xl font-semibold text-gray-800">
                   Domain Knowledge
@@ -29,7 +29,7 @@ export default function AiInsightsSection() {
             </Card>
             
             {/* Hide image and gradient on mobile */}
-            <div className="hidden md:block pl-10">
+            <div className="hidden xl:block pl-10">
               <img
                 src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754893434/image_3_jfnwiv_ytxas2.avif"
                 alt="Domain Knowledge Illustration"
@@ -40,12 +40,12 @@ export default function AiInsightsSection() {
           </div>
 
           {/* Middle Column */}
-          <div className="flex flex-col gap-8 items-center justify-center lg:mt-04 p-2">
+          <div className="flex flex-col gap-8 items-center justify-center xl:mt-04 p-2 w-full">
             {/* Hide gradient on mobile */}
-            <div className="hidden md:block w-full max-w-sm h-32 bg-gradient-to-b from-[#fff5f5] to-red-200 rounded-b-3xl"></div>
+            <div className="hidden xl:block w-full max-w-sm h-32 bg-gradient-to-b from-[#fff5f5] to-red-200 rounded-b-3xl"></div>
             
-            <Card className="rounded-2xl shadow-3xl border-0 bg-gradient-to-br from-red-500 to-red-600 p-6 text-white w-full max-w-sm h-64 flex items-center justify-center">
-              <CardContent className="p-5 text-center">
+            <Card className="rounded-2xl shadow-3xl border-0 bg-gradient-to-br from-red-500 to-red-600 p-6 text-white w-full max-w-sm h-64 flex items-center justify-center hidden lg:block">
+              <CardContent className="p-5 pt-15 text-center">
                 <div className="text-5xl font-bold mb-3">75%</div>
                 <div className="text-sm font-semibold leading-relaxed">
                   of the services are available with us.
@@ -87,7 +87,7 @@ export default function AiInsightsSection() {
             </Card>
             
             {/* Hide image and gradient on mobile */}
-            <div className="hidden md:block pl-10">
+            <div className="hidden xl:block pl-10">
               <img
                 src="https://res.cloudinary.com/dujw4np0d/image/upload/v1754893479/image_2_qzxt24_j3hjus.avif"
                 alt="Team Collaboration"

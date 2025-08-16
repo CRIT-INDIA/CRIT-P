@@ -128,11 +128,11 @@ const SAPHero = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200">
               <div>
-                <div className="text-3xl font-bold text-red-600">500+</div>
+                <div className="text-3xl font-bold text-red-600">100+</div>
                 <div className="text-sm text-gray-500">Projects Completed</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-red-600">15+</div>
+                <div className="text-3xl font-bold text-red-600">10+</div>
                 <div className="text-sm text-gray-500">Years Experience</div>
               </div>
               <div>

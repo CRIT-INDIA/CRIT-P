@@ -147,17 +147,73 @@ const CardCarousel = ({
                 modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
                 className="w-full h-full"
                 breakpoints={{
+                  // Mobile (up to 425px)
                   320: {
                     slidesPerView: 1,
-                    spaceBetween: 20
+                    spaceBetween: 20,
+                    centeredSlides: true
                   },
-                  640: {
-                    slidesPerView: 1,
-                    spaceBetween: 30
+                  // Tablet (426px to 768px)
+                  426: {
+                    slidesPerView: 1.5,
+                    spaceBetween: 0, // Remove space between slides
+                    centeredSlides: true,
+                    on: {
+                      init: function() {
+                        this.slides.forEach((slide, index) => {
+                          const slideEl = slide.querySelector('div'); // Target the inner div
+                          if (index === this.activeIndex) {
+                            slideEl.style.transform = 'scale(1)';
+                            slideEl.style.opacity = '1';
+                            slideEl.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+                          } else if (index === this.activeIndex + 1 || 
+                                   (this.activeIndex === this.slides.length - 1 && index === 0)) {
+                            slideEl.style.transform = 'scale(0.9) translateX(-15px)';
+                            slideEl.style.opacity = '0.8';
+                            slideEl.style.boxShadow = '0 5px 15px rgba(0,0,0,0.08)';
+                          } else {
+                            slideEl.style.transform = 'scale(0.9)';
+                            slideEl.style.opacity = '0.6';
+                            slideEl.style.boxShadow = 'none';
+                          }
+                          slideEl.style.transition = 'all 0.3s ease';
+                        });
+                      },
+                      slideChange: function() {
+                        this.slides.forEach((slide, index) => {
+                          const slideEl = slide.querySelector('div');
+                          if (index === this.activeIndex) {
+                            slideEl.style.transform = 'scale(1)';
+                            slideEl.style.opacity = '1';
+                            slideEl.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
+                          } else if (index === this.activeIndex + 1 || 
+                                   (this.activeIndex === this.slides.length - 1 && index === 0)) {
+                            slideEl.style.transform = 'scale(0.9) translateX(-15px)';
+                            slideEl.style.opacity = '0.8';
+                            slideEl.style.boxShadow = '0 5px 15px rgba(0,0,0,0.08)';
+                          } else {
+                            slideEl.style.transform = 'scale(0.9)';
+                            slideEl.style.opacity = '0.6';
+                            slideEl.style.boxShadow = 'none';
+                          }
+                        });
+                      }
+                    }
                   },
-                  1024: {
+                  // Desktop (769px and up)
+                  769: {
                     slidesPerView: 3,
-                    spaceBetween: 40
+                    spaceBetween: 30,
+                    centeredSlides: true,
+                    on: {
+                      init: function() {
+                        this.slides.forEach(slide => {
+                          slide.style.transform = 'scale(1)';
+                          slide.style.opacity = '1';
+                          slide.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                        });
+                      }
+                    }
                   }
                 }}
               >

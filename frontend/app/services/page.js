@@ -38,7 +38,6 @@ export default function Services() {
         <div className="max-w-[90rem] mx-auto">
           <SapHero />
           <ServicesGrid1 />
-          <FaqSection1 />
         </div>
       </div>
     </div>

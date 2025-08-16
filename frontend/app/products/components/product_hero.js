@@ -141,20 +141,20 @@ export default function Home() {
         </div>
         {/* Right: Product Grid */}
         {/* Keeping lg:grid-cols-4 as per your provided code */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
           {/* SAP S/4HANA card - spans 2 rows */}
           <div
-            className="service-card card-hover-gradient group relative bg-white border border-[#d9dbe7] flex flex-col h-full items-center shadow rounded-2xl transition-all duration-400 min-h-[200px] p-4 md:p-7 row-span-2 col-span-1 max-w-xs w-[90%] mx-auto focus:outline-none overflow-hidden hover:z-20 transform translate-y-0 hover:-translate-y-2 hover:transition-transform hover:duration-500 hover:ease-in-out"
+            className="service-card card-hover-gradient mobile-tap group relative bg-white border border-[#d9dbe7] flex flex-col h-full items-center shadow rounded-xl sm:rounded-2xl min-h-[150px] sm:min-h-[180px] md:min-h-[240px] p-2.5 sm:p-4 md:p-5 row-span-2 col-span-1 w-full focus:outline-none overflow-hidden hover:-translate-y-1 hover:transition-transform hover:duration-200 hover:ease-out"
             style={{ gridRow: "span 2 / span 2" }}
           >
             <div className="flex flex-col justify-end items-center mt-auto mb-1 transition-transform duration-500 ease-in-out group-hover:-translate-y-2">
-              <div className="mb-2 text-red-600 group-hover:text-red-600 group-hover:drop-shadow-xl transition-all duration-500 ease-in-out group-hover:scale-105">
+              <div className="mb-1 sm:mb-2 text-red-600 group-hover:text-red-600 group-active:scale-95 group-hover:drop-shadow-xl transition-all duration-200 ease-out group-hover:scale-105">
                 {React.cloneElement(services[0].icon, { className: 'w-12 h-12' })}
               </div>
               <h4 className="text-red-600 group-hover:text-red-600 text-lg font-bold text-center mb-0 leading-tight uppercase transition-colors duration-500 ease-in-out">
                 {services[0].name}
               </h4>
-              <div className="text-[#292359] group-hover:text-white/90 text-[0.7rem] text-center uppercase font-bold opacity-80 tracking-wide mb-1 transition-colors duration-500 ease-in-out">
+              <div className="text-[#292359] group-hover:text-white/90 text-[0.6rem] sm:text-[0.7rem] text-center uppercase font-bold opacity-80 tracking-wide mb-1 transition-colors duration-500 ease-in-out line-clamp-2">
                 {services[0].tagline}
               </div>
               <div className="service-desc text-[#777094] group-hover:text-white/85 text-xs font-medium mt-1 text-center leading-snug">
@@ -168,22 +168,22 @@ export default function Home() {
             return (
               <div
                 key={service.name}
-                className={`service-card card-hover-gradient group rounded-2xl bg-white border border-[#d9dbe7] flex flex-col h-full items-center shadow transition-all duration-600 p-3 md:p-7 max-w-xs w-[90%] mx-auto focus:outline-none overflow-hidden transform translate-y-0 hover:-translate-y-2 hover:transition-transform hover:duration-500 hover:ease-in-out ${
+                className={`service-card card-hover-gradient mobile-tap group rounded-xl sm:rounded-2xl bg-white border border-[#d9dbe7] flex flex-col h-full items-center shadow p-2.5 sm:p-4 md:p-5 w-full focus:outline-none overflow-hidden min-h-[150px] sm:min-h-[180px] md:min-h-[240px] hover:-translate-y-1 hover:transition-transform hover:duration-200 hover:ease-out ${
                   isBusinessObjects ? "row-span-2 col-span-1" : ""
                 }`}
                 style={isBusinessObjects ? { gridRow: "span 2 / span 2" } : {}}
               >
                 <div className="flex flex-col justify-end items-center mt-auto mb-1 transition-transform duration-500 ease-linear group-hover:-translate-y-2">
-                  <div className="mb-2 text-red-600 group-hover:text-red-600 group-hover:drop-shadow-xl transition-all duration-500 ease-in-out">
-                    {React.cloneElement(service.icon, { className: 'w-12 h-12' })}
+                  <div className="mb-1 sm:mb-2 text-red-600 group-hover:text-red-600 group-active:scale-90 sm:group-active:scale-100 sm:group-hover:drop-shadow-xl transition-transform duration-150 ease-out sm:group-hover:scale-105">
+                    {React.cloneElement(service.icon, { className: 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12' })}
                   </div>
-                  <h4 className="text-red-600 group-hover:text-red-600 text-lg font-bold text-center mb-0 leading-tight uppercase transition-colors duration-500 ease-in-out">
+                  <h4 className="text-red-600 group-hover:text-red-600 text-sm sm:text-base font-bold text-center mb-0 leading-tight uppercase transition-colors duration-500 ease-in-out line-clamp-2">
                     {service.name}
                   </h4>
-                  <div className="text-[#292359]  group-hover:text-white/90 text-[0.7rem] text-center uppercase font-bold opacity-80 tracking-wide mb-1 transition-colors duration-500 ease-in-out">
+                  <div className="text-[#292359] group-hover:text-white/90 text-[0.6rem] sm:text-[0.7rem] text-center uppercase font-bold opacity-80 tracking-wide mb-1 transition-colors duration-500 ease-in-out line-clamp-2">
                     {service.tagline}
                   </div>
-                  <div className="service-desc text-[#777094] group-hover:text-white/85 text-xs font-medium mt-1 text-center leading-snug">
+                  <div className="service-desc text-[#777094] group-hover:text-white/85 text-[0.7rem] sm:text-xs font-medium mt-1 text-center leading-tight line-clamp-3">
                     {service.description}
                   </div>
                 </div>
@@ -194,6 +194,19 @@ export default function Home() {
       </div>
       {/* Fade effect at the bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+      <style jsx global>{`
+        @media (max-width: 639px) {
+          .mobile-tap:active {
+            transform: scale(0.97);
+            opacity: 0.9;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+          }
+          .mobile-tap:active .lucide {
+            transform: scale(0.95);
+            transition: transform 0.1s ease-out;
+          }
+        }
+      `}</style>
       {/* Custom styling for hover transitions and icon color */}
       <style jsx global>{`
         .service-card .lucide {

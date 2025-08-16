@@ -11,7 +11,7 @@ function MetricsDesktopView() {
 
   const targetValues = {
     years: 11,
-    projects: 600,
+    projects: 100,
     clients: 200,
     technologies: 75
   };
@@ -217,7 +217,7 @@ function MetricsDesktopView() {
   );
 }
 
-// Mobile version (existing GrowingSection)
+// Mobile version with FIXED single column layout
 import { Rocket, Layers, Building2, Settings2 } from 'lucide-react';
 
 const GrowingSectionMobile = () => {
@@ -231,8 +231,8 @@ const GrowingSectionMobile = () => {
 
   const targets = {
     years: 11,
-    projects: 600,
-    clients: 200,
+    projects: 100,
+    clients: 50,
     technologies: 75
   };
 
@@ -294,7 +294,7 @@ const GrowingSectionMobile = () => {
   ];
 
   return (
-    <div className="w-full max-w-md mx-auto relative overflow-hidden min-h-screen flex flex-col block md:hidden px-4 sm:px-6 py-8 sm:py-12 bg-gradient-to-br from-red-50 to-white">
+    <div className="w-full max-w-md mx-auto relative overflow-hidden min-h-screen flex flex-col px-4 sm:px-6 py-8 sm:py-12">
       <div className="flex-1 flex flex-col justify-center">
         <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           <div className="relative inline-block">
@@ -324,7 +324,8 @@ const GrowingSectionMobile = () => {
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* FIXED: Changed from grid-cols-1 sm:grid-cols-2 to just grid-cols-1 to keep single column for all mobile screens */}
+        <div className="grid grid-cols-1 gap-4">
           {stats.map((stat, index) => (
             <div 
               key={index}
@@ -357,15 +358,43 @@ const GrowingSectionMobile = () => {
   );
 };
 
-const GrowingSection = () => (
-  <>
-    <div className="hidden md:block">
-      <MetricsDesktopView />
-    </div>
-    <div className="block md:hidden">
-      <GrowingSectionMobile />
-    </div>
-  </>
-);
+// Custom hook to check screen size
+const useMobileCheck = () => {
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    
+    // Initial check
+    setIsMobile(mediaQuery.matches);
+    
+    // Function to update state on change
+    const handleMediaQueryChange = (e) => {
+      setIsMobile(e.matches);
+    };
+    
+    // Add listener for changes
+    mediaQuery.addListener(handleMediaQueryChange);
+    
+    // Cleanup
+    return () => mediaQuery.removeListener(handleMediaQueryChange);
+  }, []);
+  
+  return isMobile;
+};
+
+const GrowingSection = () => {
+  const isMobile = useMobileCheck();
+  
+  // Debug log
+  useEffect(() => {
+  }, [isMobile]);
+
+  return (
+    <>
+      {isMobile ? <GrowingSectionMobile /> : <MetricsDesktopView />}
+    </>
+  );
+};
 
 export default GrowingSection;

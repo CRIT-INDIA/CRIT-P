@@ -161,17 +161,29 @@ export default function BenefitsSection({ serviceName }) {
     fetchBenefits();
   }, [serviceName, normalizeServiceName]);
 
-  // Auto-rotate benefit highlight every 5 seconds (pause on hover)
+  // Auto-rotate benefit highlight every 5 seconds (pause on hover) - only for desktop
   useEffect(() => {
     if (benefits.length <= 1) return;
 
     let interval;
     function startRotation() {
-      interval = setInterval(() => setActiveBenefit(prev => (prev + 1) % benefits.length), 5000);
+      // Only auto-rotate on desktop (>768px)
+      if (window.innerWidth > 768) {
+        interval = setInterval(() => setActiveBenefit(prev => (prev + 1) % benefits.length), 5000);
+      }
     }
     startRotation();
 
-    return () => clearInterval(interval);
+    const handleResize = () => {
+      clearInterval(interval);
+      startRotation();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [benefits.length]);
 
   // Keyboard navigation for benefits list
@@ -227,9 +239,103 @@ export default function BenefitsSection({ serviceName }) {
           </p>
         </header>
 
-        {/* Grid Content */}
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left Detail Panel */}
+        {/* Mobile Layout (≤768px) */}
+        <div className="block md:hidden">
+          {/* Grid Panel - Mobile (3x2 grid) */}
+          <div className="grid grid-cols-3 gap-3 mb-8">
+            {benefits.slice(0, 6).map((benefit, index) => {
+              const isActive = index === activeBenefit;
+              return (
+                <button
+                  key={index}
+                  data-index={index}
+                  type="button"
+                  onClick={() => setActiveBenefit(index)}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-1 min-h-[100px]
+                    ${isActive
+                    ? 'bg-red-500 text-white shadow-lg scale-105'
+                    : 'bg-white text-gray-900 hover:bg-red-50 shadow-sm border border-gray-200'}
+                  `}
+                  aria-current={isActive ? 'true' : 'false'}
+                  aria-label={benefit.title}
+                >
+                  <span className={`${isActive ? 'text-white' : 'text-red-500'}`}>
+                    {getIconComponent(benefit.title)}
+                  </span>
+                  <span className="text-xs font-semibold text-center leading-tight">
+                    {benefit.title}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Show remaining benefits if more than 6 */}
+          {benefits.length > 6 && (
+            <div className="grid grid-cols-3 gap-3 mb-8">
+              {benefits.slice(6).map((benefit, index) => {
+                const actualIndex = index + 6;
+                const isActive = actualIndex === activeBenefit;
+                return (
+                  <button
+                    key={actualIndex}
+                    data-index={actualIndex}
+                    type="button"
+                    onClick={() => setActiveBenefit(actualIndex)}
+                    className={`flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-1 min-h-[100px]
+                      ${isActive
+                      ? 'bg-red-500 text-white shadow-lg scale-105'
+                      : 'bg-white text-gray-900 hover:bg-red-50 shadow-sm border border-gray-200'}
+                    `}
+                    aria-current={isActive ? 'true' : 'false'}
+                    aria-label={benefit.title}
+                  >
+                    <span className={`${isActive ? 'text-white' : 'text-red-500'}`}>
+                      {getIconComponent(benefit.title)}
+                    </span>
+                    <span className="text-xs font-semibold text-center leading-tight">
+                      {benefit.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Detail Panel - Mobile */}
+          <article
+            className="relative bg-gradient-to-br from-red-50 via-white to-orange-50 p-6 rounded-3xl border-2 border-red-100 shadow-xl backdrop-blur-sm"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {/* Decorative elements */}
+            <div className="absolute top-4 right-4 w-12 h-12 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full blur-xl animate-pulse pointer-events-none"></div>
+            <div className="absolute bottom-4 left-4 w-8 h-8 bg-gradient-to-br from-red-300/20 to-pink-300/20 rounded-full blur-lg animate-pulse pointer-events-none"></div>
+
+            {benefits[activeBenefit] && (
+              <>
+                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                  <span className="p-2 rounded-full bg-red-200 text-red-600">
+                    {getIconComponent(benefits[activeBenefit].title)}
+                  </span>
+                  <span>{benefits[activeBenefit].title}</span>
+                </h3>
+                <p className="text-gray-700 mb-4 text-sm">{benefits[activeBenefit].description}</p>
+                {benefits[activeBenefit].detailedDescription && (
+                  <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
+                    {benefits[activeBenefit].detailedDescription.map((desc, idx) => (
+                      <li key={idx} className="mb-1">{desc}</li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            )}
+          </article>
+        </div>
+
+        {/* Desktop Layout (>768px) */}
+        <div className="hidden md:grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Detail Panel - Desktop */}
           <article
             className="relative lg:sticky lg:top-8 bg-gradient-to-br from-red-50 via-white to-orange-50 p-8 rounded-3xl border-2 border-red-100 shadow-xl backdrop-blur-sm transition-shadow duration-300"
             aria-live="polite"
@@ -262,7 +368,7 @@ export default function BenefitsSection({ serviceName }) {
             )}
           </article>
 
-          {/* Right List Panel */}
+          {/* Right List Panel - Desktop */}
           <nav
             className="bg-white p-6 rounded-3xl border border-gray-200 shadow-md max-h-[600px] overflow-y-auto space-y-4
             scrollbar-thin scrollbar-thumb-red-400 scrollbar-track-red-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full"

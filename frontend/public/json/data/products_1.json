@@ -3,7 +3,7 @@
       "id": "sap-s4hana",
       "name": "SAP S/4HANA",
       "subtitle": "Next-Generation Intelligent ERP Suite",
-      "category": "Enterprise Resource Planning",
+      "category": "Resource Planning",
       "icon": "Database",
       "executiveSummary": "SAP S/4HANA acts as the intelligent core of your organization, like a central nervous system providing real-time visibility and control across all business functions. Built on the foundation of the SAP HANA in-memory platform, it delivers unparalleled speed and efficiency, enabling you to process vast amounts of data instantly. This allows for data-driven decision-making, proactive problem-solving, and the automation of a wide range of tasks, freeing up resources for strategic initiatives. Beyond enhanced performance, SAP S/4HANA simplifies your IT landscape, reducing complexity and costs. More importantly, it empowers comprehensive digital transformation by providing the platform for adopting new technologies like AI, machine learning, and IoT, ultimately driving innovation and competitive advantage.",
       "keyCapabilities": [
@@ -92,7 +92,7 @@
       "id": "sap-successfactors",
       "name": "SAP SuccessFactors",
       "subtitle": "Comprehensive Human Capital Management Suite",
-      "category": "Human Resources Technology",
+      "category": "Resources Technology",
       "icon": "Users",
       "executiveSummary": "SAP SuccessFactors revolutionizes human resources, transforming it into a strategic business driver through intelligent talent management, comprehensive workforce analytics, and engaging employee-experience solutions. Going beyond traditional HR processes, SuccessFactors empowers you to align your people strategy directly with your overarching business objectives. By providing deep insights into your workforce, you can make data-driven decisions to attract, retain, and develop top talent in today's fiercely competitive market. Furthermore, SuccessFactors fosters a culture of continuous improvement by enabling personalized employee experiences, promoting collaboration, and driving increased engagement, ultimately leading to higher productivity and business success.",
       "keyCapabilities": [

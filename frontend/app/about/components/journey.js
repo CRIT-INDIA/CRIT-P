@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect ,useRef } from 'react';
+import { useState, useEffect ,useRef, useMemo, useCallback } from 'react';
 import { SparklesIcon, ChartBarIcon, UserGroupIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 import CountUp from 'react-countup';
 import { useInView } from 'react-intersection-observer';
@@ -12,10 +12,11 @@ const Journey = () => {
   const [visibleBeats, setVisibleBeats] = useState([]);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { ref: timelineRef, inView: timelineVisible } = useInView({ 
-    threshold: 0.3, 
-    triggerOnce: true 
+    threshold: 0.1, // Reduced threshold for earlier detection
+    triggerOnce: true,
+    rootMargin: '0px 0px -100px 0px' // Start animation slightly before element is in view
   });
-
+  
   const stats = [
     { number: 11, label: 'Years of Experience', icon: '🚀' },
     { number: 200, label: 'Clients', icon: '🏆'},
@@ -53,53 +54,110 @@ const Journey = () => {
     }
   ];
 
+  // Memoize the story beats to prevent unnecessary re-renders
+  const memoizedStoryBeats = useMemo(() => storyBeats, [storyBeats]);
+
   const teamQuotes = [
     "We don't just code, we craft experiences",
     "Turning enterprise nightmares into digital dreams",
     "Where innovation meets implementation"
   ];
 
+  // Optimized auto-cycle effect with requestAnimationFrame
+  const animationRef = useRef();
+  const lastUpdateTime = useRef(0);
+  const targetInterval = 4000; // 4 seconds between updates
+  
+  const updateActiveStory = useCallback(() => {
+    const now = performance.now();
+    if (now - lastUpdateTime.current >= targetInterval) {
+      setActiveStory(prev => (prev + 1) % memoizedStoryBeats.length);
+      lastUpdateTime.current = now;
+    }
+    animationRef.current = requestAnimationFrame(updateActiveStory);
+  }, [memoizedStoryBeats.length]);
+  
   useEffect(() => {
     setIsVisible(true);
     
-    // Auto-cycle through story beats
-    const interval = setInterval(() => {
-      setActiveStory((prev) => (prev + 1) % storyBeats.length);
-    }, 4000);
+    // Start the animation loop
+    animationRef.current = requestAnimationFrame(updateActiveStory);
     
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [updateActiveStory]);
 
-  // Enhanced timeline reveal animation
+  // Optimized timeline reveal animation with requestAnimationFrame
+  const animationFrameId = useRef();
+  
   useEffect(() => {
-    if (timelineVisible) {
-      setTimelineInView(true);
+    if (!timelineVisible) return;
+    
+    setTimelineInView(true);
+    const startTime = performance.now();
+    const staggerDelay = 100; // 100ms delay between items
+    
+    const animate = () => {
+      const elapsed = performance.now() - startTime;
+      const currentIndex = Math.min(
+        Math.floor(elapsed / staggerDelay),
+        memoizedStoryBeats.length - 1
+      );
       
-      // Staggered reveal of timeline items
-      storyBeats.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleBeats(prev => [...prev, index]);
-        }, index * 100); // 100ms delay between each item
+      setVisibleBeats(prev => {
+        // Only update if we have new items to add
+        return prev.length <= currentIndex 
+          ? [...Array(currentIndex + 1).keys()] 
+          : prev;
       });
-    }
-  }, [timelineVisible]);
+      
+      if (currentIndex < memoizedStoryBeats.length - 1) {
+        animationFrameId.current = requestAnimationFrame(animate);
+      }
+    };
+    
+    animationFrameId.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, [timelineVisible, memoizedStoryBeats.length]);
 
-  // Add a ref for the timeline container
+  // Add a ref for the timeline container and throttle the mousemove handler
   const timelineContainerRef = useRef(null);
-
-  // Mouse move handler for interactive timeline
-  const handleTimelineMouseMove = (e) => {
-    const container = timelineContainerRef.current;
-    if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const beatWidth = rect.width / storyBeats.length;
-    const hoveredIndex = Math.min(
-      storyBeats.length - 1,
-      Math.max(0, Math.floor(x / beatWidth))
-    );
-    setActiveStory(hoveredIndex);
-  };
+  const lastHoveredIndex = useRef(-1);
+  const rafId = useRef();
+  
+  // Throttled mouse move handler for interactive timeline
+  const handleTimelineMouseMove = useCallback((e) => {
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
+    
+    rafId.current = requestAnimationFrame(() => {
+      const container = timelineContainerRef.current;
+      if (!container) return;
+      
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const beatWidth = rect.width / memoizedStoryBeats.length;
+      const hoveredIndex = Math.min(
+        memoizedStoryBeats.length - 1,
+        Math.max(0, Math.floor(x / beatWidth))
+      );
+      
+      // Only update if the index has changed
+      if (hoveredIndex !== lastHoveredIndex.current) {
+        lastHoveredIndex.current = hoveredIndex;
+        setActiveStory(hoveredIndex);
+      }
+    });
+  }, [memoizedStoryBeats.length]);
 
   return (
     <section className="relative min-h-* overflow-hidden pt-10">

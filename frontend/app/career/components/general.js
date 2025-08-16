@@ -297,24 +297,37 @@ const CareerPage = () => {
                 <path d="M15 21 Q 120 15, 200 18" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" fill="none"/>
               </svg>
               </h2>
-              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed text-justify mobile-justify-fix">
                 {sapCareerInfo.description}
               </p>
             </div>
 
             {/* Requirements Section */}
-            <div className="bg-red-50 rounded-xl p-6 border border-gray-300 mb-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Award size={20} className="text-red-600" />
-                Requirements
-              </h3>
-              <div className="space-y-2">
-                {sapCareerInfo.requirements.map((requirement, index) => (
-                  <div key={index} className="flex items-start gap-2 text-gray-700">
-                    <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                    <span className="text-sm">{requirement}</span>
-                  </div>
-                ))}
+            <div className="relative rounded-xl p-6 border border-gray-300 mb-6 overflow-hidden">
+              {/* Background Image */}
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src="https://res.cloudinary.com/dujw4np0d/image/upload/v1755156914/5878303_ylqnqc.avif" 
+                  alt="Background" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-white/90"></div>
+              </div>
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Award size={20} className="text-red-600" />
+                  Requirements
+                </h3>
+                <div className="space-y-2">
+                  {sapCareerInfo.requirements.map((requirement, index) => (
+                    <div key={index} className="flex items-start gap-2 text-gray-900">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
+                      <span className="text-md">{requirement}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -484,9 +497,9 @@ const CareerPage = () => {
       )}
 
       {/* Stay Ahead of Opportunities Section */}
-      <section className="px-2 sm:px-5 py-7 sm:py-11">
+      <section className="px-2 sm:px-5 py-7 sm:py-11 opportunities-section">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-12">
+          <div className="text-center mb-8 sm:mb-12 tablet-header">
             <h2 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 relative inline-block">
               Stay Ahead of Opportunities
             <svg className="mx-auto my-0" style={{marginTop: '-3px'}} width="160" height="18" viewBox="0 0 220 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -499,20 +512,132 @@ const CareerPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-stretch tablet-stack-layout">
+            {/* Custom styles for laptop-1024px */}
+            <style jsx>{`
+                  @media (min-width: 1024px) and (max-width: 1279px) {
+                       .opportunities-section {
+                          padding: 1.5rem 1rem !important;
+                       }
+                      .grid {
+                         gap: 1rem !important;
+                        padding: 0 0.5rem;
+                      }
+                      .laptop-content {
+                        max-width: 90% !important;
+                        margin: 0 auto;
+                      }
+                      .left-content-box {
+                        margin-left: 0 !important;
+                      }
+                      .right-form-box {
+                         padding: 1rem !important;
+                       }
+                       .laptop-heading {
+                          font-size: 2rem !important;
+                        }
+                       .laptop-paragraph {
+                          font-size: 0.95rem !important;
+                          line-height: 1.5 !important;
+                        }
+                   }
+                   
+                   /* Tablet-specific styles (768px to 1023px) */
+                    @media (min-width: 768px) and (max-width: 1023px) {
+                         .tablet-stack-layout {
+                             grid-template-columns: 1fr !important;
+                          }
+                          .tablet-main-grid {
+                              grid-template-columns: 1fr !important;
+                              gap: 2rem !important;
+                           }
+                           .tablet-content-box {
+                                max-width: 90% !important;
+                                margin: 0 auto 2rem auto !important;
+                                height: auto !important;
+                                min-height: 400px !important;
+                             }
+                             .tablet-content-heading {
+                                 font-size: 2.75rem !important;
+                                 margin-bottom: 1.5rem !important;
+                              }
+                              .tablet-content-paragraph {
+                                 font-size: 1.25rem !important;
+                                 line-height: 1.7 !important;
+                                 max-width: 90% !important;
+                                 margin: 0 auto 2rem auto !important;
+                              }
+                       .opportunities-section {
+                          padding: 2rem 1.5rem !important;
+                       }
+                       .grid {
+                          gap: 2rem !important;
+                       }
+                       .laptop-content {
+                          max-width: 100% !important;
+                       }
+                       .left-content-box {
+                          justify-content: center !important;
+                          margin: 0 auto !important;
+                          max-width: 90% !important;
+                       }
+                       .right-form-box {
+                          padding: 1.5rem !important;
+                          max-width: 90% !important;
+                          margin: 0 auto !important;
+                       }
+                       .laptop-heading {
+                          font-size: 2.5rem !important;
+                          margin-bottom: 1rem !important;
+                       }
+                       .laptop-paragraph {
+                           font-size: 1.1rem !important;
+                           line-height: 1.6 !important;
+                           padding: 0 1rem !important;
+                        }
+                        .tablet-form-grid {
+                            gap: 1rem !important;
+                         }
+                         .tablet-header {
+                            margin-bottom: 2rem !important;
+                         }
+                         .tablet-header h2 {
+                            font-size: 2.25rem !important;
+                         }
+                         .tablet-header p {
+                             font-size: 1.1rem !important;
+                             max-width: 90% !important;
+                             margin: 0 auto !important;
+                          }
+                          .tablet-input {
+                              font-size: 1rem !important;
+                              padding: 0.75rem 1rem !important;
+                           }
+                           .tablet-button {
+                               font-size: 1.1rem !important;
+                               padding: 0.75rem 1.5rem !important;
+                               min-width: 200px !important;
+                            }
+                            .tablet-form-container {
+                                 padding: 1.5rem !important;
+                                 max-width: 90% !important;
+                                 margin: 0 auto !important;
+                                 margin-top: 1rem !important;
+                              }
+                    }
+                `}</style>
             {/* Left Side - Content */}
-            <div className="h-full flex justify-center lg:ml-40 items-start mb-8 lg:mb-0">
+            <div className="h-full flex justify-center md:ml-10 lg:ml-40 items-start mb-8 md:mb-0 left-content-box">
               <div 
-                className="bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-teal-600/20 rounded-2xl p-4 sm:p-6 pt-4 backdrop-blur-sm border border-gray-700 h-full max-w-md w-full flex flex-col justify-start items-center relative overflow-hidden"
+                className="rounded-2xl p-4 sm:p-6 pt-4 backdrop-blur-sm border border-gray-700 h-full max-w-md w-full flex flex-col justify-start items-center relative overflow-hidden laptop-content tablet-content-box"
                 style={{
-                  backgroundImage: `url('https://res.cloudinary.com/dujw4np0d/image/upload/v1752223234/10516_k7wjyt.jpg')`,
+                  backgroundImage: `url('https://res.cloudinary.com/duz9xipfm/image/upload/v1754373214/hands-stack-business-people_nxnmw8.avif?fetch-priority=high&loading=lazy')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
+                  backgroundRepeat: 'no-repeat',
+                  backgroundOpacity: '0.5'
                 }}
               >
-                {/* Dark overlay for text readability */}
-                <div className="absolute inset-0 bg-black/60 rounded-2xl"></div>
                 
                 {/* Animated Blob Background */}
                 <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
@@ -520,17 +645,13 @@ const CareerPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-teal-500/10 animate-blob animation-delay-4000"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-purple-500/10 animate-blob"></div>
                 </div>
-                {/* Card overlay and content */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center rounded-2xl z-0"
-                  style={{ backgroundImage: 'url(https://res.cloudinary.com/duz9xipfm/image/upload/v1754373214/hands-stack-business-people_nxnmw8.avif)' }}
-                ></div>
+                
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 via-gray-900/60 to-gray-900/80 rounded-2xl z-10"></div>
                 <div className="relative z-20 text-center w-full p-4 pt-26">
-                  <h3 className="text-4xl font-bold mb-6 text-white">
+                  <h3 className="text-4xl font-bold mb-6 text-white laptop-heading tablet-content-heading">
                     Discover Opportunities & Stay Connected
                   </h3>
-                  <p className="text-gray-100 text-lg leading-relaxed">
+                  <p className="text-gray-100 text-lg leading-relaxed laptop-paragraph tablet-content-paragraph">
                     We're always looking for talented individuals who share our vision. If you don't find the right opportunity today, submit your details, and we'll reach out when a suitable position opens up.
                   </p>
                 </div>
@@ -538,7 +659,7 @@ const CareerPage = () => {
             </div>
 
             {/* Right Side - Form */}
-            <div className="bg-gradient-to-b from-gray-200 to-gray-100 rounded-2xl p-4 sm:p-8 border border-gray-400 h-full">
+            <div className="bg-gradient-to-b from-gray-200 to-gray-100 rounded-2xl p-4 sm:p-8 border border-gray-400 h-full right-form-box tablet-form-container">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
                 {submitError && (
                   <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
@@ -546,7 +667,7 @@ const CareerPage = () => {
                   </div>
                 )}
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 tablet-form-grid tablet-stack-layout">
                   <div>
                     <label htmlFor="fullName" className="block text-black font-medium mb-2">
                       Full Name <span className="text-red-500">*</span>
@@ -556,7 +677,7 @@ const CareerPage = () => {
                       type="text"
                       className={`w-full bg-gray-200 border ${
                         errors.fullName ? 'border-red-500' : 'border-gray-600'
-                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors`}
+                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
                       placeholder="Enter your full name"
                       {...register('fullName', { 
                         required: 'Full name is required',
@@ -573,11 +694,11 @@ const CareerPage = () => {
                       Desired Position <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="position"
+                      id="desiredPosition"
                       type="text"
                       className={`w-full bg-gray-200 border ${
-                        errors.position ? 'border-red-500' : 'border-gray-600'
-                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors`}
+                        errors.desiredPosition ? 'border-red-500' : 'border-gray-600'
+                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
                       placeholder="e.g., React Developer"
                       {...register('position', { 
                         required: 'Position is required' 
@@ -599,7 +720,7 @@ const CareerPage = () => {
                       type="text"
                       className={`w-full bg-gray-200 border ${
                         errors.experience ? 'border-red-500' : 'border-gray-600'
-                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors`}
+                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
                       placeholder="e.g., 3+ years"
                       {...register('experience', { 
                         required: 'Experience is required' 
@@ -615,11 +736,11 @@ const CareerPage = () => {
                       Current CTC <span className="text-red-500">*</span>
                     </label>
                     <input
-                      id="currentCtc"
+                      id="currentCTC"
                       type="text"
                       className={`w-full bg-gray-200 border ${
-                        errors.currentCtc ? 'border-red-500' : 'border-gray-600'
-                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors`}
+                        errors.currentCTC ? 'border-red-500' : 'border-gray-600'
+                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors tablet-input`}
                       placeholder="e.g., 10 LPA"
                       {...register('currentCtc', { 
                         required: 'Current CTC is required' 
@@ -641,7 +762,7 @@ const CareerPage = () => {
                       rows="4"
                       className={`w-full bg-gray-200 border ${
                         errors.message ? 'border-red-500' : 'border-gray-600'
-                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors resize-none`}
+                      } rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors resize-none tablet-input`}
                       placeholder="Tell us about yourself and your interests..."
                       {...register('message', { 
                         required: 'Message is required',
@@ -703,7 +824,7 @@ const CareerPage = () => {
                     disabled={isSubmitting}
                     className={`bg-red-600 text-white px-6 py-3 rounded-full ${
                       isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-red-700'
-                    } transition-all duration-300 flex items-center gap-2 font-semibold text-sm min-w-[180px] justify-center`}
+                    } transition-all duration-300 flex items-center gap-2 font-semibold text-sm min-w-[180px] justify-center tablet-button`}
                   >
                     {isSubmitting ? (
                       <>

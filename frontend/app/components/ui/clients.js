@@ -1,17 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const MovingClientsSection = () => {
-  // Client data matching the style from your image
+  // Client data with explicit dimensions
   const clients = [
-    { name: 'Binstellar', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945853/Binstellar_fzcqil.avif' },
-    { name: 'SFMS', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/SFMS_bu6too.avif' },
-    { name: 'Form6', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/Form6_cgfpju.avif' },
-    { name: 'EPN', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/EPN_aniiah.avif' },
-    { name: 'Protergia', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/protergia_uwbnzm.avif' },
-    { name: 'NXI', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/NXI_a3a0yi.avif' },
-    { name: 'Brihati', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753946455/Brihati_1_uoswjm.avif' },
-    { name: 'VP techno labs', logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/VPTechnoLabsFinal_fieg3m.avif' },
+    { 
+      name: 'Binstellar', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945853/Binstellar_fzcqil.avif',
+      width: 150,
+      height: 100
+    },
+    { 
+      name: 'SFMS', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/SFMS_bu6too.avif',
+      width: 150,
+      height: 100
+    },
+    
+    { 
+      name: 'EPN', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/EPN_aniiah.avif',
+      width: 150,
+      height: 100
+    },
+    { 
+      name: 'Protergia', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/protergia_uwbnzm.avif',
+      width: 150,
+      height: 100
+    },
+    { 
+      name: 'NXI', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/NXI_a3a0yi.avif',
+      width: 150,
+      height: 100
+    },
+    { 
+      name: 'Brihati', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753946455/Brihati_1_uoswjm.avif',
+      width: 150,
+      height: 100
+    },
+    { 
+      name: 'VP techno labs', 
+      logo: 'https://res.cloudinary.com/duz9xipfm/image/upload/v1753945852/VPTechnoLabsFinal_fieg3m.avif',
+      width: 150,
+      height: 100
+    },
   ];
+  
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Triple the clients array for seamless infinite scroll
   const duplicatedClients = [...clients, ...clients, ...clients];
@@ -56,39 +98,72 @@ const MovingClientsSection = () => {
    </h1>      </div>
 
       <div className="w-full bg-[#00203F] drop-shadow-lg rounded-lg md:p-2">
-        <div className="flex gap-8 md:gap-12">
-          {/* Left side - Title */}
-          
-          
-          {/* Right side - Moving Clients Container */}
-          <div className="flex-grow relative overflow-hidden group pt-2">
-            
-            {/* Scrolling Container */}
-            <div className="flex items-center animate-marquee">
-              {duplicatedClients.map((client, index) => (
-                <div
-                  key={`${client.name}-${index}`}
-                  className="flex-shrink-0 mx-8 md:mx-12"
+        {/* Preload critical images */}
+        <div className="hidden p-5">
+          {clients.map((client) => (
+            <link 
+              key={`preload-${client.name}`} 
+              rel="preload" 
+              as="image" 
+              href={client.logo} 
+              imageSrcSet={`${client.logo} 1x`}
+              fetchPriority="high"
+            />
+          ))}
+        </div>
+        
+        <div className="relative overflow-hidden group">
+          {/* Scrolling Container */}
+          <div className="flex items-center animate-marquee">
+            {duplicatedClients.map((client, index) => (
+              <div
+                key={`${client.name}-${index}`}
+                className="flex-shrink-0 mx-6 md:mx-10"
+                style={{
+                  width: `${client.width}px`,
+                  height: 'auto',
+                  aspectRatio: `${client.width}/${client.height}`,
+                  minHeight: '60px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0.5rem',
+                  margin: '0 0.5rem'
+                }}
+              >
+                <div 
+                  className="flex items-center justify-center w-full h-full p-2 border border-white bg-white rounded-sm"
+                  style={{
+                    minHeight: '60px',
+                    width: '100%',
+                    aspectRatio: `${client.width}/${client.height}`
+                  }}
                 >
-                  <div className="flex items-center justify-center h-16 w-32 md:h-20 md:w-40 p-2 border border-white bg-white rounded-sm">
-                    <img
+                  {isMounted && (
+                    <Image
                       src={client.logo}
                       alt={`${client.name} logo`}
-                      className="h-full w-full object-contain object-center opacity-90 hover:opacity-100 transition-all duration-300"
+                      width={client.width}
+                      height={client.height}
+                      className="object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300"
+                      loading={index < 4 ? 'eager' : 'lazy'}
+                      priority={index < 2}
                       style={{
+                        width: '100%',
+                        height: '100%',
                         maxWidth: '100%',
                         maxHeight: '100%',
-                        width: 'auto',
-                        height: 'auto',
                         objectFit: 'contain'
                       }}
                     />
-                  </div>
-                  <div className="w-full text-center text-xs text-white font-medium mt-1">{client.name}</div>
-                  
+                  )}
                 </div>
-              ))}
-            </div>
+                <div className="w-full text-center text-xs text-white font-medium mt-1 whitespace-nowrap">
+                  {client.name}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

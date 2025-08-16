@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { ThreeDMarquee } from "./components/ui/3d-marquee";
 import MovingClientsSection from "./components/ui/clients";
+import { SeoMetadata, StructuredData } from './SeoComponents';
 
 // Lazy load non-critical components
 
@@ -57,18 +58,25 @@ export default function Home() {
   // Only render components on the client side
   if (!isClient) {
     return (
-      <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5] min-h-screen">
-        {/* SEO H1 - Only for search engines */}
-        <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
-        Transforming Business Through SAP Excellence
-        </h1>
-        <div className="h-screen w-full bg-gray-100 animate-pulse"></div>
-      </div>
+      <>
+        <SeoMetadata />
+        <StructuredData />
+        <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5] min-h-screen">
+          {/* SEO H1 - Only for search engines */}
+          <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+          Transforming Business Through SAP Excellence
+          </h1>
+          <div className="h-screen w-full bg-gray-100 animate-pulse"></div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5]">
+    <>
+      <SeoMetadata />
+      <StructuredData />
+      <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5]">
       
       {/* Critical components rendered immediately */}
       <div className="relative h-* min-h-[400px] overflow-hidden">
@@ -133,6 +141,6 @@ export default function Home() {
           </div>
         </Suspense>
       </div>
-    
+    </> // Added closing fragment tag here
   );
 }

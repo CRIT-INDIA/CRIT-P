@@ -50,7 +50,7 @@ const FlipCard = ({ item, index }) => {
           className="absolute inset-0 h-full w-full rounded-2xl overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className="h-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 sm:p-4 md:p-6 flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4 shadow-lg hover:shadow-2xl transition-all duration-300 relative">
+          <div className="h-full bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl p-3 sm:p-4 md:p-6 flex flex-col items-center justify-center space-y-1 sm:space-y-2 md:space-y-4 shadow-lg hover:shadow-2xl transition-all duration-300 relative">
             {/* Decorative gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-transparent to-pink-50 opacity-50"></div>
             
@@ -60,14 +60,14 @@ const FlipCard = ({ item, index }) => {
             </div>
             
             {/* Icon container with animation */}
-            <div className="relative z-10 p-2 sm:p-1.5 md:p-2 bg-red-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="relative z-10 p-1.5 sm:p-1.5 md:p-2 bg-red-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
               <div className="text-white">
-                {React.cloneElement(item.icon, { className: "w-8 h-8 sm:w-8 sm:h-8 md:w-10 md:h-10" })}
+                {React.cloneElement(item.icon, { className: "w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10" })}
               </div>
             </div>
             
             {/* Title with gradient text on hover */}
-            <h2 className="relative z-10 text-base sm:text-base md:text-lg font-bold text-gray-800 text-center leading-tight px-1 sm:px-2 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-pink-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2">
+            <h2 className="relative z-10 text-sm sm:text-sm md:text-lg font-bold text-gray-800 text-center leading-tight px-1 sm:px-2 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-pink-500 group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2">
               {item.title}
             </h2>
           </div>
@@ -100,10 +100,10 @@ const FlipCard = ({ item, index }) => {
             </div>
             
             {/* Content */}
-            <div className="relative z-10 text-center w-full h-full flex flex-col justify-center overflow-y-auto p-2">
+            <div className="relative z-10 text-center w-full h-full flex flex-col justify-center overflow-y-auto p-1 sm:p-2">
               <div className="mb-2 p-2 bg-white/20 backdrop-blur-sm rounded-lg inline-block mx-auto flex-shrink-0">
                 <div className="text-white">
-                  {React.cloneElement(item.icon, { className: "w-5 h-5" })}
+                  {React.cloneElement(item.icon, { className: "w-4 h-4 sm:w-5 sm:h-5" })}
                 </div>
               </div>
               <p className="text-white text-xs sm:text-sm leading-normal font-medium px-1 sm:px-2 flex-grow overflow-y-auto hide-scrollbar">
@@ -246,7 +246,8 @@ const Capabilities = () => {
         </div>
         
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 px-2 sm:px-0">
+          {/* Modified grid layout: Mobile 2 columns, Tablet 2 columns, Desktop 3-4 columns */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 px-2 sm:px-0">
             {services.map((item, index) => (
               <FlipCard key={index} item={item} index={index} />
             ))}

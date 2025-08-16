@@ -88,8 +88,8 @@ const ConnectWithUs = () => {
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Side - Image */}
-          <div className="order-2 lg:order-1">
+          {/* Left Side - Image - Hidden on mobile */}
+          <div className="order-2 lg:order-1 hidden lg:block">
             <div className="relative">
               <img
                 srcSet="https://res.cloudinary.com/dujw4np0d/image/upload/f_auto,q_auto,c_scale,w_800,h_600/v1751520337/image_tl5e86.jpg 800w,
@@ -108,55 +108,37 @@ const ConnectWithUs = () => {
           </div>
 
           {/* Right Side - Social Media Links */}
-          <div className="order-1 lg:order-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="order-1 lg:order-2 w-full">
+            {/* Social media links - consistent across all devices */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 mt-4">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href="#"
-                  className={`bg-black/30 transition-all duration-300 transform hover:scale-105 rounded-xl p-4 sm:p-5 flex items-center space-x-4 shadow-lg`}
+                  className={`flex items-center space-x-3 sm:space-x-4 p-2 sm:p-3 lg:p-4 rounded-lg bg-black/5 hover:bg-black/10 transition-colors ${
+                    hoveredIndex === index ? 'ring-2 ring-offset-2 ring-offset-white ring-opacity-50' : ''
+                  }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  style={
-                    hoveredIndex === index
-                      ? { boxShadow: '0 0 10px 1px' }
-                      : {}
-                  }
                 >
-                  <div className="flex-shrink-0">
-                    {social.platform === 'instagram' ? (
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-md bg-gradient-to-tr from-[#fd5d47] via-[#e1306c] to-[#833ab4]">
-                        <img
-                          srcSet={getOptimizedImageUrl(social.icon, social.width, social.height)}
-                          src={`https://res.cloudinary.com/dujw4np0d/image/upload/f_auto,q_auto,c_scale,w_${social.width},h_${social.height}/${social.icon}.png`}
-                          alt={`${social.iconName} icon`}
-                          width={social.width}
-                          height={social.height}
-                          className="w-6 h-6 object-contain"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-md" style={{ background: social.brandColor }}>
-                        <img
-                          srcSet={getOptimizedImageUrl(social.icon, social.width, social.height)}
-                          src={`https://res.cloudinary.com/dujw4np0d/image/upload/f_auto,q_auto,c_scale,w_${social.width},h_${social.height}/${social.icon}.png`}
-                          alt={`${social.iconName} icon`}
-                          width={social.width}
-                          height={social.height}
-                          className="w-6 h-6 object-contain"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                    )}
+                  <div 
+                    className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center shadow-md"
+                    style={{ background: social.platform === 'instagram' ? 'linear-gradient(45deg, #fd5d47, #e1306c, #833ab4)' : social.brandColor }}
+                  >
+                    <img
+                      srcSet={getOptimizedImageUrl(social.icon, social.width, social.height)}
+                      src={`https://res.cloudinary.com/dujw4np0d/image/upload/f_auto,q_auto,c_scale,w_${social.width},h_${social.height}/${social.icon}.png`}
+                      alt={`${social.iconName} icon`}
+                      width={social.width}
+                      height={social.height}
+                      className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-semibold text-base truncate">
-                      {social.username}
-                    </p>
-                  </div>
+                  <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-800">
+                    {social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}
+                  </span>
                 </a>
               ))}
             </div>

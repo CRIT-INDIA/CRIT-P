@@ -1,3 +1,21 @@
+/* Improved mobile readability for overview text on mobile only */
+@media (max-width: 640px) {
+  .mobile-justify-fix {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+    word-spacing: 0.02em !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1.7 !important;
+    max-width: 95vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+    font-size: 1.05rem !important;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 /* globals.css */

@@ -906,48 +906,43 @@ export default function ServiceBlock({ serviceName }) {
       <section className="py-10 md:py-10 text-black bg-[#fff5f5]">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-Gray-700">Overview</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-Gray-700 text-center">Overview</h2>
             <svg className="mx-auto my-0" style={{marginTop: '-18px'}} width="130" height="18" viewBox="0 0 220 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 18 Q 110 8, 215 14" stroke="#FFD700" strokeWidth="4" strokeLinecap="round" fill="none"/>
               <path d="M15 21 Q 120 15, 200 18" stroke="#FFD700" strokeWidth="2" strokeLinecap="round" fill="none"/>
             </svg>  
           </div>
           <div className="grid lg:grid-cols-2 gap-2 items-center">
-            <div className="space-y-6 mr-10">
-              <h3 className="text-2xl font-bold text-gray-700">{formattedServiceName || 'Overview'}</h3>
-              <p className="text-lg leading-relaxed text-gray-700 whitespace-pre-line">{overviewText}</p>
+            <div className="space-y-6 mr-0 px-2 w-full md:mr-10 md:px-0 md:w-auto">
+              <h3 className="text-2xl font-bold text-gray-700 text-center">{formattedServiceName || 'Overview'}</h3>
+              <p 
+                className="text-lg leading-relaxed text-gray-700 whitespace-pre-line text-justify w-full md:w-auto md:mx-0 mx-auto mobile-justify-fix"
+              >
+                {overviewText}
+              </p>
+
             </div>
             <div className="relative mt-1 lg:mt-1">
               <div className="rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center bg-gray-100 p-4">
-                <div className="flex flex-col gap-6 w-full max-w-2xl">
-                  {/* Pair 1 */}
-                  <div className="flex gap-4 items-center">
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753165462/Project_70-02_uw5nzc.jpg" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
-                    </div>
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.2s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166207/101_ZS0yMw_jp1azj.jpg" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
-                    </div>
+                {/* 2 columns by default, 3 columns (3-3) only on md (tablet, 768px) */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-2 gap-4 w-full max-w-2xl">
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753165462/Project_70-02_uw5nzc.jpg" alt="Overview 1" className="w-40 h-40 object-contain rounded" />
                   </div>
-                  
-                  {/* Pair 2 */}
-                  <div className="flex gap-4 items-center">
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.4s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166794/MyApril10_k7z7wb.jpg" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
-                    </div>
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.6s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167637/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox.jpg" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
-                    </div>
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.2s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166207/101_ZS0yMw_jp1azj.jpg" alt="Overview 2" className="w-40 h-40 object-contain rounded" />
                   </div>
-                  
-                  {/* Pair 3 */}
-                  <div className="flex gap-4 items-center">
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.8s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167770/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf.jpg" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
-                    </div>
-                    <div className="flex-1 rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '1s' }}>
-                      <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167937/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8.jpg" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
-                    </div>
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.4s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753166794/MyApril10_k7z7wb.jpg" alt="Overview 3" className="w-40 h-40 object-contain rounded" />
+                  </div>
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.6s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167637/vecteezy_office-worker-vector-illustration-holding-business-chart_8149367-1_bstjox.jpg" alt="Overview 4" className="w-40 h-40 object-contain rounded" />
+                  </div>
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '0.8s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167770/Man_and_woman_with_briefcase_shake_hand_generated_bv5jsf.jpg" alt="Overview 5" className="w-40 h-40 object-contain rounded" />
+                  </div>
+                  <div className="rounded-xl flex items-center justify-center animate-pulse bg-red-100 p-1" style={{ animationDelay: '1s' }}>
+                    <img src="https://res.cloudinary.com/dujw4np0d/image/upload/v1753167937/vecteezy_business-teamwork-brainstorming-in-flat-style-isolated-on_36893510_mzafm8.jpg" alt="Overview 6" className="w-40 h-40 object-contain rounded" />
                   </div>
                 </div>
               </div>
@@ -955,6 +950,7 @@ export default function ServiceBlock({ serviceName }) {
           </div>
         </div>
       </section>
+
 
       {/* Implementation Process Section */}
       <ImplementationProcess />
@@ -1003,7 +999,7 @@ export default function ServiceBlock({ serviceName }) {
       {/* FAQ Section */}
       <ErrorBoundary>
         <SafeComponent>
-          <FaqSection1 />
+          <FaqSection1 serviceName={serviceName} />
         </SafeComponent>
       </ErrorBoundary>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "../../lib/utils";
 import { motion } from "motion/react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 
 export function PointerHighlight({
   children,
@@ -11,35 +11,66 @@ export function PointerHighlight({
 }) {
   const containerRef = useRef(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const rafId = useRef();
+  const lastDimensions = useRef({ width: 0, height: 0 });
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const { width, height } = containerRef.current.getBoundingClientRect();
-      setDimensions({ width, height });
+  // Throttle dimension updates with requestAnimationFrame
+  const updateDimensions = useCallback((width, height) => {
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
     }
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
+    
+    rafId.current = requestAnimationFrame(() => {
+      // Only update if dimensions have significantly changed
+      if (Math.abs(width - lastDimensions.current.width) > 1 || 
+          Math.abs(height - lastDimensions.current.height) > 1) {
+        lastDimensions.current = { width, height };
         setDimensions({ width, height });
       }
     });
+  }, []);
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    // Initial dimensions
+    const { width, height } = containerRef.current.getBoundingClientRect();
+    updateDimensions(width, height);
+
+    // Set up resize observer with debounce
+    let timeoutId;
+    const resizeObserver = new ResizeObserver((entries) => {
+      // Debounce resize events
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      
+      timeoutId = setTimeout(() => {
+        const entry = entries[0];
+        if (entry) {
+          const { width, height } = entry.contentRect;
+          updateDimensions(width, height);
+        }
+      }, 16); // ~60fps
+    });
+
+    resizeObserver.observe(containerRef.current);
 
     return () => {
-      if (containerRef.current) {
-        resizeObserver.unobserve(containerRef.current);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+      resizeObserver.disconnect();
     };
-  }, []);
+  }, [updateDimensions]);
 
   return (
     <div className={cn("relative w-fit", containerClassName)} ref={containerRef}>
       {children}
-      {dimensions.width > 0 && dimensions.height > 0 && (
+      {dimensions.width > 10 && dimensions.height > 10 && (
         <motion.div
           className="pointer-events-none absolute inset-0 z-0"
           initial={{ opacity: 0, scale: 0.95, originX: 0, originY: 0 }}

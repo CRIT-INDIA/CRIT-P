@@ -13,8 +13,9 @@ const AboutUsHero = () => {
   const [visibleBeats, setVisibleBeats] = useState([]);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { ref: timelineRef, inView: timelineVisible } = useInView({ 
-    threshold: 0.3, 
-    triggerOnce: true 
+    threshold: 0.1, // Reduced threshold for earlier detection
+    triggerOnce: true,
+    rootMargin: '0px 0px -100px 0px' // Start animation slightly before element is in view
   });
 
 
@@ -61,43 +62,72 @@ const AboutUsHero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Enhanced timeline reveal animation
+  // Optimized timeline reveal animation
   useEffect(() => {
-    if (timelineVisible) {
-      setTimelineInView(true);
+    if (!timelineVisible) return;
+    
+    setTimelineInView(true);
+    let timeouts = [];
+    
+    // Use requestAnimationFrame for better performance
+    const startTime = performance.now();
+    const staggerDelay = 300; // Reduced from 800ms to 300ms
+    
+    const animate = () => {
+      const elapsed = performance.now() - startTime;
+      const currentIndex = Math.min(
+        Math.floor(elapsed / staggerDelay),
+        storyBeats.length - 1
+      );
       
-      // Staggered reveal of timeline items
-      storyBeats.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleBeats(prev => [...prev, index]);
-        }, index * 800); // 800ms delay between each item
+      setVisibleBeats(prev => {
+        // Only update if we have new items to add
+        return prev.length <= currentIndex 
+          ? [...Array(currentIndex + 1).keys()] 
+          : prev;
       });
-    }
+      
+      if (currentIndex < storyBeats.length - 1) {
+        timeouts.push(requestAnimationFrame(animate));
+      }
+    };
+    
+    timeouts.push(requestAnimationFrame(animate));
+    
+    // Cleanup function
+    return () => {
+      timeouts.forEach(id => cancelAnimationFrame(id));
+    };
   }, [timelineVisible]);
 
   return (
     <div className="relative w-full min-h-[100vh] md:min-h-[100vh] lg:min-h-[70vh] xl:min-h-[60vh] overflow-hidden pt-20">
-      {/* Video Background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover object-center"
-        style={{ zIndex: 0 }}
-      >
-        <source 
-          src="https://res.cloudinary.com/duz9xipfm/video/upload/v1752208306/Office_Stock_Footage_-_People_Working_As_A_Team___Group_Meeting___Business_Footage_Free_Download_vkppj8.webm" 
-          alt="Carrer page video - People Working As A Team"
-          type="video/webm" 
-        />
-        {/* Fallback for browsers that don't support webm */}
-        <source 
-          src="https://res.cloudinary.com/duz9xipfm/video/upload/v1752208306/Office_Stock_Footage_-_People_Working_As_A_Team___Group_Meeting___Business_Footage_Free_Download_vkppj8.webm" 
-          alt="Carrer page video - People Working As A Team"
-          type="video/mp4" 
-        />
-      </video>
+      {/* Optimized Video Background */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{ zIndex: 0 }}
+          onLoadStart={(e) => {
+            // Lower the video quality on slower connections
+            if (navigator.connection && 
+                (navigator.connection.saveData || 
+                 navigator.connection.effectiveType === 'slow-2g' || 
+                 navigator.connection.effectiveType === '2g')) {
+              e.target.playbackRate = 0.8;
+            }
+          }}
+        >
+          <source 
+            src="https://res.cloudinary.com/duz9xipfm/video/upload/c_scale,w_1280/v1752208306/Office_Stock_Footage_-_People_Working_As_A_Team___Group_Meeting___Business_Footage_Free_Download_vkppj8.webm" 
+            type="video/webm" 
+          />
+        </video>
+      </div>
       
       {/* Overlay */}
       <div 

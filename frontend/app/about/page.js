@@ -1,50 +1,80 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense, lazy, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
-import OurMissionSection from "./components/expertise";
-import ERPImplementationDiagram from "./components/erp";
-import TechHero from "./components/hero";
-import Journey from "./components/journey";
+
+// Lazy load heavy components
+const OurMissionSection = lazy(() => import("./components/expertise"));
+const ERPImplementationDiagram = lazy(() => import("./components/erp"));
+const TechHero = lazy(() => import("./components/hero"));
+const Journey = lazy(() => import("./components/journey"));
+
+// Loading component
+const LoadingPlaceholder = () => (
+  <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5] min-h-screen">
+    <h1 className="sr-only">
+      About the Connecting Roots
+    </h1>
+    <div className="h-screen w-full bg-gray-100 animate-pulse"></div>
+  </div>
+);
+
+// Component for client-side only rendering
+function ClientOnly({ children }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Use requestIdleCallback to avoid blocking the main thread
+    const idleId = requestIdleCallback(() => {
+      setIsClient(true);
+    });
+
+    return () => cancelIdleCallback(idleId);
+  }, []);
+
+  if (!isClient) {
+    return <LoadingPlaceholder />;
+  }
+
+  return (
+    <Suspense fallback={<LoadingPlaceholder />}>
+      {children}
+    </Suspense>
+  );
+}
 
 export default function AboutPage() {
   const pathname = usePathname();
 
-  useEffect(() => {
-    // Client-side specific code can go here
-    // For example, analytics tracking, etc.
+  // Wrap analytics in a useCallback to prevent unnecessary re-renders
+  const trackPageView = useCallback(() => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('config', 'YOUR_GA_MEASUREMENT_ID', {
+        page_path: pathname,
+      });
+    }
   }, [pathname]);
 
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="relative overflow-hidden max-w-[1800px] w-full mx-auto bg-[#fff5f5] min-h-screen">
-        {/* SEO H1 - Only for search engines */}
-        <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
-          About the Connecting Roots
-        </h1>
-        <div className="h-screen w-full bg-gray-100 animate-pulse"></div>
-      </div>
-    );
-  }
+    // Defer non-critical work
+    const timer = setTimeout(trackPageView, 0);
+    return () => clearTimeout(timer);
+  }, [trackPageView]);
 
   return (
-    <main className="min-h-* bg-[#fff5f5]">
-      <TechHero />
-      <div className="relative min-h-*">
-        <Journey />
-      </div>
-      <div className="relative min-w-* min-h-*">
-        <ERPImplementationDiagram />
-      </div>
-      <div className="relative">
-        <OurMissionSection />
-      </div>
-    </main>
+    <ClientOnly>
+      <main className="min-h-* bg-[#fff5f5]">
+        <TechHero />
+        <div className="relative min-h-*">
+          <Journey />
+        </div>
+        <div className="relative min-w-* min-h-*">
+          <ERPImplementationDiagram />
+        </div>
+        <div className="relative">
+          <OurMissionSection />
+        </div>
+      </main>
+    </ClientOnly>
   );
 }
