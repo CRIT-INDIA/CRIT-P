@@ -116,51 +116,66 @@ const MovingClientsSection = () => {
           </svg>
    </h1>      </div>
 
-      <div className="w-full bg-[#00203F] drop-shadow-lg rounded-lg md:p-4">
+      <div className="w-full bg-[#00203F] drop-shadow-lg rounded-lg p-1">
         <div className="relative overflow-hidden group">
-          {/* Scrolling Container */}
-          <div className="flex items-center animate-marquee">
-            {duplicatedClients.map((client, index) => {
-              // Calculate padding-bottom percentage for aspect ratio
-              const paddingBottom = `${(client.height / client.width) * 100}%`;
-              
-              return (
-                <div
-                  key={`${client.name}-${index}`}
-                  className="flex-shrink-0 mx-4 md:mx-6"
+          <div className="flex items-start animate-marquee">
+            {duplicatedClients.map((client, index) => (
+              <div 
+                key={`${client.name}-${index}`}
+                className="flex-shrink-0 mx-6 flex flex-col items-center"
+                style={{
+                  width: `${client.width}px`,
+                  position: 'relative',
+                  flexShrink: 0,
+                  padding: '10px 0' // Added padding for better spacing
+                }}
+              >
+                <div 
+                  className="relative bg-white rounded-sm flex items-center justify-center p-3"
                   style={{
-                    width: `${client.width}px`,
-                    minHeight: '60px',
-                    position: 'relative'
+                    width: '100%',
+                    height: `${client.height}px`,
+                    aspectRatio: '16/9',
+                    marginBottom: '12px' // Space between logo and name
                   }}
                 >
-                  <div 
-                    className="relative w-full"
-                    style={{
-                      paddingBottom: '56.25%', // 16:9 aspect ratio
-                      minHeight: '60px',
-                      backgroundColor: '#f5f5f5',
-                      borderRadius: '0.25rem'
-                    }}
-                  >
-                    {isMounted && (
-                      <Image
-                        src={client.logo}
-                        alt={`${client.name} logo`}
-                        fill
-                        sizes={`(max-width: 768px) ${client.width/2}px, ${client.width}px`}
-                        className="object-contain p-2 bg-white rounded-sm"
-                        loading={index < 4 ? 'eager' : 'lazy'}
-                        priority={index < 2}
-                      />
-                    )}
-                  </div>
-                  <div className="w-full text-center text-xs text-white font-medium mt-1 whitespace-nowrap">
-                    {client.name}
-                  </div>
+                  {isMounted && (
+                    <Image
+                      src={client.logo}
+                      alt={`${client.name} logo`}
+                      width={client.width - 24}
+                      height={client.height - 24}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        maxWidth: '100%',
+                        maxHeight: '100%'
+                      }}
+                      sizes={`(max-width: 768px) ${client.width/2}px, ${client.width}px`}
+                      loading={index < 4 ? 'eager' : 'lazy'}
+                      priority={index < 2}
+                    />
+                  )}
                 </div>
-              );
-            })}
+                <div 
+                  className="w-full text-center text-sm text-white font-medium whitespace-nowrap overflow-hidden text-ellipsis"
+                  style={{
+                    color: '#ffffff',
+                    fontWeight: 500,
+                    padding: '4px 0',
+                    height: '24px',
+                    lineHeight: '24px',
+                    display: 'block',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    maxWidth: '100%'
+                  }}
+                >
+                  {client.name}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
